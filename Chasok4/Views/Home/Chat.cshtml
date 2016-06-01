@@ -1,0 +1,106 @@
+﻿@model IEnumerable< Chasok4.Models.Entities.AppUser>
+@{ 
+     ViewBag.Title = "Chat";
+}
+<div class="text-center text-success">
+    <h2>@ViewBag.Message</h2>
+</div>
+<div class="row">    
+    <div class="col-md-2 col-md-offset-0">
+        <div class="dropdown">
+
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                You'rs Friends &raquo;
+            </button>
+            <ul class="dropdown-menu">
+            @foreach (var item in Model)
+            {
+                <p>@Html.DisplayFor(modelItem => item.UserName)</p> 
+            }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <p><a class="btn btn-default" href="">Learn more &raquo;</a></p>
+    </div>
+</div>
+
+<div class="form-group col-md-offset-3 col-md-6 text-center" >
+    <input value="@User.Identity.Name" id="user" hidden/><br>
+    <div>@User.Identity.Name</div>
+    <form onsubmit="return false" >
+        <input type="text" id="message1" placeholder="Enter some message" />
+        <input type="submit" value=">>>" id="send1" />
+    </form><hr/>
+    <div>
+        <label for="comments">Comments</label>
+    </div>
+    <div class="jumbotron text-left" id='messages'></div>      
+</div>
+
+<div class="main">
+
+    <div id="loginBlock">
+        Введите логин:<br />
+        <input id="txtUserName" type="text" />
+        <input id="btnLogin" type="button" value="Войти" />
+    </div>
+
+    <div id="chatBody">
+        <div id="header"></div>
+        <div id="inputForm">
+            <input type="text" id="message" />
+            <input type="button" id="sendmessage" value="Отправить" />
+        </div>
+
+        <div id="chatroom"></div>
+
+        <div id="chatusers">
+            <p><b>Все пользователи</b></p>
+        </div>
+    </div>
+    <input id="hdId" type="hidden" />
+    <input id="username" type="hidden" />
+</div>
+
+
+    @*<script>
+        var socket,
+            $txt = document.getElementById('message'),
+            $user = document.getElementById('user'),
+            $messages = document.getElementById('messages');                        
+            
+        //if (typeof (WebSocket) !== 'undefined') {
+        //    socket = new WebSocket("ws://localhost/Chasok4/ChatHandler.ashx");            
+        //} else {
+        //    socket = new MozWebSocket("ws://localhost/Chasok4/ChatHandler.ashx");            
+        //}
+
+        //socket.onmessage = function (msg) {
+        //    var $el = document.createElement('p');
+        //    $el.innerHTML = msg.data;
+        //    $messages.appendChild($el);            
+        //};
+
+        //socket.onclose = function (event) {
+        //    alert('Мы потеряли её. Пожалуйста, обновите страницу');
+        //};
+
+        //document.getElementById('send').onclick = function () {
+        //    socket.send($user.value + ' : ' + $txt.value );
+        //    $txt.value = '';            
+        //};        
+        function updateTimer() {
+            var cell = document.getElementById('cell');
+            var count = Number(cell.innerHTML);
+
+            cell.innerHTML = count += 1;
+        };
+       
+        setInterval(updateTimer, 1000);
+    </script>*@
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/util.js"></script>
