@@ -9,7 +9,10 @@
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body>   
+<body> 
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)  
     <div class="container body-content">
         <div class="navbar navbar-inverse ">
             <ul class="nav navbar-nav">
@@ -43,8 +46,6 @@
 
     setInterval(updateTimer, 1000);
     </script>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    
 </body>
 </html>

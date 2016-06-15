@@ -6,9 +6,11 @@ using Microsoft.AspNet.SignalR;
 using Chasok4.Models.Entities;
 using Chasok4.Repositories;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Chasok4.ChatHubs
 {
+    [HubName("ChatHub")]
     public class ChatHub : Hub
     {
         static List<AppUser> ChatUsers = new List<AppUser>();

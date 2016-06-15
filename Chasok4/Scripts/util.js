@@ -1,9 +1,9 @@
 ﻿$(function () {
 
-    $('#chatBody').hide();
-    $('#loginBlock').show();
+    //$('#chatBody').hide();
+    //$('#loginBlock').show();
     // Ссылка на автоматически-сгенерированный прокси хаба
-    var chat = $.connection.chatHub;
+    var chat = $.connection.ChatHub;
     // Объявление функции, которая хаб вызывает при получении сообщений
     chat.client.addMessage = function (name, message) {
         // Добавление сообщений на веб-страницу 
@@ -45,21 +45,21 @@
 
         $('#sendmessage').click(function () {
             // Вызываем у хаба метод Send
-            chat.server.send($('#username').val(), $('#message').val());
+            chat.server.send($('#txtUserName').val(), $('#message').val());
             $('#message').val('');
         });
 
-        // обработка логина
-        $("#btnLogin").click(function () {
+        //// обработка логина
+        //$("#btnLogin").click(function () {
 
-            var name = $("#txtUserName").val();
-            if (name.length > 0) {
-                chat.server.connect(name);
-            }
-            else {
-                alert("Введите имя");
-            }
-        });
+        //    var name = $("#txtUserName").val();
+        //    if (name.length > 0) {
+        //        chat.server.connect(name);
+        //    }
+        //    else {
+        //        alert("Введите имя");
+        //    }
+        //});
     });
 });
 // Кодирование тегов

@@ -2,6 +2,10 @@
 @{ 
      ViewBag.Title = "Chat";
 }
+<script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/util.js"></script>
+
 <div class="text-center text-success">
     <h2>@ViewBag.Message</h2>
 </div>
@@ -15,7 +19,7 @@
             <ul class="dropdown-menu">
             @foreach (var item in Model)
             {
-                <p>@Html.DisplayFor(modelItem => item.UserName)</p> 
+                <p>Name: @Html.DisplayFor(modelItem => item.UserName) + Email: @Html.DisplayFor(modelItem => item.Email)</p> 
             }
             </ul>
         </div>
@@ -25,27 +29,27 @@
     </div>
 </div>
 
-<div class="form-group col-md-offset-3 col-md-6 text-center" >
-    <input value="@User.Identity.Name" id="user" hidden/><br>
+<div class="form-group col-md-offset-3 col-md-6 text-center" id="chatBody">
+    <input value="@User.Identity.Name" id="txtUserName" hidden/><br>
     <div>@User.Identity.Name</div>
     <form onsubmit="return false" >
-        <input type="text" id="message1" placeholder="Enter some message" />
-        <input type="submit" value=">>>" id="send1" />
+        <input type="text" id="message" placeholder="Enter some message" />
+        <input type="submit" value=">>>" id="sendmessage" />
     </form><hr/>
-    <div>
+    @*<div>
+        <div id="chatroom"></div>
         <label for="comments">Comments</label>
-    </div>
-    <div class="jumbotron text-left" id='messages'></div>      
+        <div id="chatusers">
+            <p><b>Все пользователи</b></p>
+            <input id="hdId" hidden />
+            <input id="username" hidden />
+        </div>
+    </div>*@
+    <div class="jumbotron text-left" id='chatroom'></div>      
 </div>
 
-<div class="main">
-
-    <div id="loginBlock">
-        Введите логин:<br />
-        <input id="txtUserName" type="text" />
-        <input id="btnLogin" type="button" value="Войти" />
-    </div>
-
+@*<div class="main">  
+    
     <div id="chatBody">
         <div id="header"></div>
         <div id="inputForm">
@@ -55,13 +59,10 @@
 
         <div id="chatroom"></div>
 
-        <div id="chatusers">
-            <p><b>Все пользователи</b></p>
-        </div>
+        
     </div>
-    <input id="hdId" type="hidden" />
-    <input id="username" type="hidden" />
-</div>
+    
+</div>*
 
 
     @*<script>
@@ -100,7 +101,3 @@
         setInterval(updateTimer, 1000);
     </script>*@
 
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
-<script src="~/signalr/hubs"></script>
-<script src="~/Scripts/util.js"></script>
