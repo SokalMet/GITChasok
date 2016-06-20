@@ -1,0 +1,103 @@
+﻿@model IEnumerable< Chasok4.Models.Entities.AppUser>
+@{ 
+     ViewBag.Title = "Chat";
+}
+<script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/util.js"></script>
+
+<div class="text-center text-success">
+    <h2>@ViewBag.Message</h2>
+</div>
+<div class="row">    
+    <div class="col-md-2 col-md-offset-0">
+        <div class="dropdown">
+
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                You'rs Friends &raquo;
+            </button>
+            <ul class="dropdown-menu">
+            @foreach (var item in Model)
+            {
+                <p>Name: @Html.DisplayFor(modelItem => item.UserName) + Email: @Html.DisplayFor(modelItem => item.Email)</p> 
+            }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <p><a class="btn btn-default" href="">Learn more &raquo;</a></p>
+    </div>
+</div>
+
+<div class="form-group col-md-offset-3 col-md-6 text-center" id="chatBody">
+    <input value="@User.Identity.Name" id="txtUserName" hidden/><br>
+    <div>@User.Identity.Name</div>
+    <form onsubmit="return false" >
+        <input type="text" id="message" placeholder="Enter some message" />
+        <input type="submit" value=">>>" id="sendmessage" />
+    </form><hr/>
+    @*<div>
+        <div id="chatroom"></div>
+        <label for="comments">Comments</label>
+        <div id="chatusers">
+            <p><b>Все пользователи</b></p>
+            <input id="hdId" hidden />
+            <input id="username" hidden />
+        </div>
+    </div>*@
+    <div class="jumbotron text-left" id='chatroom'></div>      
+</div>
+
+@*<div class="main">  
+    
+    <div id="chatBody">
+        <div id="header"></div>
+        <div id="inputForm">
+            <input type="text" id="message" />
+            <input type="button" id="sendmessage" value="Отправить" />
+        </div>
+
+        <div id="chatroom"></div>
+
+        
+    </div>
+    
+</div>*
+
+
+    @*<script>
+        var socket,
+            $txt = document.getElementById('message'),
+            $user = document.getElementById('user'),
+            $messages = document.getElementById('messages');                        
+            
+        //if (typeof (WebSocket) !== 'undefined') {
+        //    socket = new WebSocket("ws://localhost/Chasok4/ChatHandler.ashx");            
+        //} else {
+        //    socket = new MozWebSocket("ws://localhost/Chasok4/ChatHandler.ashx");            
+        //}
+
+        //socket.onmessage = function (msg) {
+        //    var $el = document.createElement('p');
+        //    $el.innerHTML = msg.data;
+        //    $messages.appendChild($el);            
+        //};
+
+        //socket.onclose = function (event) {
+        //    alert('Мы потеряли её. Пожалуйста, обновите страницу');
+        //};
+
+        //document.getElementById('send').onclick = function () {
+        //    socket.send($user.value + ' : ' + $txt.value );
+        //    $txt.value = '';            
+        //};        
+        function updateTimer() {
+            var cell = document.getElementById('cell');
+            var count = Number(cell.innerHTML);
+
+            cell.innerHTML = count += 1;
+        };
+       
+        setInterval(updateTimer, 1000);
+    </script>*@
+
