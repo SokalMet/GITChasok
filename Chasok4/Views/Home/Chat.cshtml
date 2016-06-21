@@ -1,4 +1,5 @@
-﻿@model IEnumerable< Chasok4.Models.Entities.AppUser>
+﻿@using Chasok4.Repositories
+@model IEnumerable< Chasok4.Models.Entities.AppUser>
 @{ 
      ViewBag.Title = "Chat";
 }
@@ -35,34 +36,10 @@
     <form onsubmit="return false" >
         <input type="text" id="message" placeholder="Enter some message" />
         <input type="submit" value=">>>" id="sendmessage" />
-    </form><hr/>
-    @*<div>
-        <div id="chatroom"></div>
-        <label for="comments">Comments</label>
-        <div id="chatusers">
-            <p><b>Все пользователи</b></p>
-            <input id="hdId" hidden />
-            <input id="username" hidden />
-        </div>
-    </div>*@
-    <div class="jumbotron text-left" id='chatroom'></div>      
+    </form><hr/>   
+    <div class="jumbotron text-left" id="chatroom"></div>      
 </div>
 
-@*<div class="main">  
-    
-    <div id="chatBody">
-        <div id="header"></div>
-        <div id="inputForm">
-            <input type="text" id="message" />
-            <input type="button" id="sendmessage" value="Отправить" />
-        </div>
-
-        <div id="chatroom"></div>
-
-        
-    </div>
-    
-</div>*
 
 
     @*<script>
