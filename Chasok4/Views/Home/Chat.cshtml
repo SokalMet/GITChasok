@@ -20,7 +20,7 @@
             <ul class="dropdown-menu">
             @foreach (var item in Model)
             {
-                <p>Name: @Html.DisplayFor(modelItem => item.UserName) + Email: @Html.DisplayFor(modelItem => item.Email)</p> 
+                <li>Name: @Html.DisplayFor(modelItem => item.UserName) + Email: @Html.DisplayFor(modelItem => item.Email)</li> 
             }
             </ul>
         </div>
@@ -34,6 +34,7 @@
     <input value="@User.Identity.Name" id="txtUserName" hidden/><br>
     <div>@User.Identity.Name</div>
     <form onsubmit="return false" >
+        @Html.DropDownList("toUser", Model.Select(m => new SelectListItem { Value = m.Email, Text = m.Email }).ToList(), new { id = "toUser" })
         <input type="text" id="message" placeholder="Enter some message" />
         <input type="submit" value=">>>" id="sendmessage" />
     </form><hr/>   

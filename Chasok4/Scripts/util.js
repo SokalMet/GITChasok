@@ -45,7 +45,7 @@
 
         $('#sendmessage').click(function () {
             // Вызываем у хаба метод Send
-            chat.server.send($('#txtUserName').val(), $('#message').val());
+            chat.server.send($('#txtUserName').val(), $('#message').val(), $('#toUser').val());
             $('#message').val('');
         });
 

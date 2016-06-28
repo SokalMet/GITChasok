@@ -183,7 +183,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="ChatHubs\ChatHub.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AppUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
@@ -273,7 +272,6 @@
     <Content Include="Views\Home\Chat.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\AppUser\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

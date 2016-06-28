@@ -15,10 +15,10 @@ namespace Chasok4.ChatHubs
     {
         static List<AppUser> ChatUsers = new List<AppUser>();
 
-        public void Send(string name, string message)
+        public void Send(string name, string message, string toUser)
         {
-            Clients.All.addMessage(name, message);
-        }
+            Clients.All.addMessage(name, message + " " + toUser);
+        }   
 
         // Подключение нового пользователя
         public void Connect(string userName)
