@@ -75,6 +75,9 @@ namespace Chasok4.Models
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
+        [Display(Name = "Nick name")]
+        public string NickName { get; set; } = " no model";
+
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение пароля")]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]

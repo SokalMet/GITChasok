@@ -3,44 +3,81 @@
 @{ 
      ViewBag.Title = "Chat";
 }
-<script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+<div class="jumbotron text-center text-success">
+    <h2>@ViewBag.UpperTitle</h2>
+</div>
+
+<div class="row">    
+    <div class="col-md-12" >
+        <label for="getAllUsers">Select users You want talk to</label>
+        @Html.DropDownList("getAllUsers", null, "All Users", new { })       
+    </div>
+    
+</div>
+
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-1">
+        <br />
+        <div id="selectedInUsersDiv"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chatBody" class="table-bordered">            
+            <input id="textUserName" value="@User.Identity.Name" hidden /><br>
+            <div class="table-responsive">
+                <form action="" onsubmit="return false">
+                    <textarea placeholder="Enter some message" title="Enter some message" id="message"></textarea>
+                    <br>
+                    <button class="btn btn-success" value="Send" id="sendmessage">Send</button>
+                    <br />
+                    <div  style="white-space:pre-wrap" id="chatroom">                        
+                    </div>
+                </form>
+            </div>
+           
+            <hr />
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
 <script src="~/signalr/hubs"></script>
 <script src="~/Scripts/util.js"></script>
-
-<div class="text-center text-success">
-    <h2>@ViewBag.Message</h2>
-</div>
-<div class="row">    
-    <div class="col-md-2 col-md-offset-0">
-        <div class="dropdown">
-
-            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                You'rs Friends &raquo;
-            </button>
-            <ul class="dropdown-menu">
-            @foreach (var item in Model)
-            {
-                <li>Name: @Html.DisplayFor(modelItem => item.UserName) + Email: @Html.DisplayFor(modelItem => item.Email)</li> 
+<script>
+    var selectedInUsers = [];    
+    $("#getAllUsers").change(function () {
+        selectedInUsers.push($("#getAllUsers").val());
+        for (var i = 0; i < $("#getAllUsers")[0].length; i++) {
+            if ($("#getAllUsers")[0][i].value == $("#getAllUsers").val()) {
+                $("#getAllUsers")[0].remove(i);
             }
-            </ul>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <p><a class="btn btn-default" href="">Learn more &raquo;</a></p>
-    </div>
-</div>
+        }
+        renderSelectedUsers();
+    });
 
-<div class="form-group col-md-offset-3 col-md-6 text-center" id="chatBody">
-    <input value="@User.Identity.Name" id="txtUserName" hidden/><br>
-    <div>@User.Identity.Name</div>
-    <form onsubmit="return false" >
-        @Html.DropDownList("toUser", Model.Select(m => new SelectListItem { Value = m.Email, Text = m.Email }).ToList(), new { id = "toUser" })
-        <input type="text" id="message" placeholder="Enter some message" />
-        <input type="submit" value=">>>" id="sendmessage" />
-    </form><hr/>   
-    <div class="jumbotron text-left" id="chatroom"></div>      
-</div>
-
+    function renderSelectedUsers() {
+        $("#selectedInUsersDiv").html("");
+        for (var i = 0; i < selectedInUsers.length ; i++) {
+            $("#selectedInUsersDiv").append("<div><input readonly type=\"text\" width=\"200px\" id=\"checkedUser\" value=\"" + selectedInUsers[i]
+                + "\"/><button type=\"button\" class=\"glyphicon glyphicon-trash\" onclick=\"removeSelectedUser('"
+                + selectedInUsers[i].toString() + "')\"></button> </div>  ");
+        }        
+    }
+   
+    function removeSelectedUser(e) {
+        for (var i = 0; i < selectedInUsers.length; i++) {
+            if (selectedInUsers[i] == e) {
+                var opt = '<option value="' + e + '">' + e + '</option>';
+                $("#getAllUsers").append(opt);
+                selectedInUsers.splice(i, 1);
+            }
+        }
+        renderSelectedUsers();
+    }
+    
+</script>
 
 
     @*<script>

@@ -10,16 +10,17 @@ namespace Chasok4.Controllers
 {
     public class HomeController : Controller
     {
-        IUserRepository db = new UserRepository();
+        UnitOfWork unitOfWork;
         
         public HomeController()
         {
-            this.db = new UserRepository();          
+            unitOfWork = new UnitOfWork();
         }
 
         public ActionResult Index()
         {
-            return View(db.GetUsers());
+            var users = unitOfWork.User.GetUsers();
+            return View();
         }
 
         public ActionResult About()
@@ -32,14 +33,45 @@ namespace Chasok4.Controllers
         [Authorize]
         public ActionResult Chat()
         {
-            var Users = db.GetUsers();
+            var User = unitOfWork.User.GetUsers();
             //IEnumerable<ApplicationUser> allUsers = userRep.GetUsers();
-            ViewBag.Message = "Your Chat page.";
-            //ViewBag.ListOfUsers = allUsers;
-            return View(Users);
+            ViewBag.UpperTitle = "Your Chat page.";
+            //ViewBag.UserName = unitOfWork.User.User
+            //ViewBag.ListOfMessages = unitOfWork.Message.GetMessages() ;
+
+            ViewBag.getAllUsers = new SelectList(GetUsersFriends(), "Value", "Text");
+            return View(User);
         }
 
-        
-        
+
+
+        [HttpPost]
+        public void MessageAction(Message message)
+        {
+            unitOfWork.Message.AddMessage(message);
+        }
+
+
+        #region Custom methods
+
+        [NonAction]
+        public List<SelectListItem> GetUsersFriends()
+        {
+            var sourceItems = new List<SelectListItem>();
+            
+            foreach (var item in unitOfWork.User.GetUsers().Where(x => x.UserName!=User.Identity.Name).OrderBy(x => x.UserName)
+                .Select(x => x.Email).ToList())
+            {
+                sourceItems.Add(new SelectListItem()
+                {
+                    Value = item,
+                    Text = item                    
+                });
+            }
+
+            return sourceItems;
+        }
+
+        #endregion
     }
 }

@@ -12,7 +12,7 @@ namespace Chasok4.Migrations
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(Chasok4.DAL.ApplicationDbContext context)
+        protected override void Seed(DAL.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

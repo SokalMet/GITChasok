@@ -11,7 +11,7 @@ namespace Chasok4.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
 
         public UserRepository()
         {
@@ -26,7 +26,7 @@ namespace Chasok4.Repositories
         public void DeleteUser(string userId)
         {
             AppUser user = db.Users.Find(userId);
-
+            if (user!=null)
             db.Users.Remove(user);
         }
 
@@ -44,12 +44,7 @@ namespace Chasok4.Repositories
         {
             db.Users.Add(user);
         }
-
-        public void Save()
-        {
-            db.SaveChanges();
-        }
-
+        
         public void UpdateUser(AppUser user)
         {
             db.Entry(user).State = System.Data.Entity.EntityState.Modified;

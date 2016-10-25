@@ -5,17 +5,16 @@
     // Ссылка на автоматически-сгенерированный прокси хаба
     var chat = $.connection.ChatHub;
     // Объявление функции, которая хаб вызывает при получении сообщений
-    chat.client.addMessage = function (name, message) {
-        // Добавление сообщений на веб-страницу 
-        $('#chatroom').append('<p><b>' + htmlEncode(name)
-            + '</b>: ' + htmlEncode(message) + '</p>');
+    chat.client.addMessage = function (message) {
+        // Добавление сообщений на веб-страницу         
+        $('#chatroom').append('<p><b>' + htmlEncode(message) + '</p>');
+        
     };
 
     // Функция, вызываемая при подключении нового пользователя
     chat.client.onConnected = function (id, userName, allUsers) {
-
-        $('#loginBlock').hide();
-        $('#chatBody').show();
+        //$('#loginBlock').hide();
+        //$('#chatBody').show();
         // установка в скрытых полях имени и id текущего пользователя
         $('#hdId').val(id);
         $('#username').val(userName);
@@ -40,40 +39,28 @@
         $('#' + id).remove();
     }
 
+    $.connection.hub.start(function () {
+        chat.server.join("RoomA");
+        
+    });
     // Открываем соединение
     $.connection.hub.start().done(function () {
 
         $('#sendmessage').click(function () {
             // Вызываем у хаба метод Send
-            chat.server.send($('#txtUserName').val(), $('#message').val(), $('#toUser').val());
-            $('#message').val('');
+            chat.server.send({ Msg: $('#textUserName').val() + ": " + $('#message').val(), Group: "RoomA", SelectedUsers: selectedInUsers });
         });
-
-        //// обработка логина
-        //$("#btnLogin").click(function () {
-
-        //    var name = $("#txtUserName").val();
-        //    if (name.length > 0) {
-        //        chat.server.connect(name);
-        //    }
-        //    else {
-        //        alert("Введите имя");
-        //    }
-        //});
     });
 });
+
 // Кодирование тегов
 function htmlEncode(value) {
     var encodedValue = $('<div />').text(value).html();
     return encodedValue;
 }
+
 //Добавление нового пользователя
 function AddUser(id, name) {
 
     var userId = $('#hdId').val();
-
-    if (userId != id) {
-
-        $("#chatusers").append('<p id="' + id + '"><b>' + name + '</b></p>');
-    }
 }
