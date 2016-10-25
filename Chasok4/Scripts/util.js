@@ -19,7 +19,7 @@
         $('#hdId').val(id);
         $('#username').val(userName);
         $('#header').html('<h3>Добро пожаловать, ' + userName + '</h3>');
-
+        
         // Добавление всех пользователей
         for (i = 0; i < allUsers.length; i++) {
 
@@ -40,6 +40,7 @@
     }
 
     $.connection.hub.start(function () {
+
         chat.server.join("RoomA");
         
     });
@@ -48,7 +49,16 @@
 
         $('#sendmessage').click(function () {
             // Вызываем у хаба метод Send
-            chat.server.send({ Msg: $('#textUserName').val() + ": " + $('#message').val(), Group: "RoomA", SelectedUsers: selectedInUsers });
+            chat.server.send(
+                {
+                    Msg: $('#textUserName').val() + ": " + $('#message').val(),
+                    Group: "RoomA",
+                    SelectedUsers: selectedInUsers,
+                    SenderId: $('#userId').val(),
+                    SenderName: $('#textUserName').val()
+                }
+            );
+            $('#message').val('');
         });
     });
 });

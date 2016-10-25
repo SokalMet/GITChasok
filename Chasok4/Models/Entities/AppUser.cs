@@ -13,7 +13,7 @@ namespace Chasok4.Models.Entities
     public class AppUser : IdentityUser
     {
         public string NickName { get; set; } 
-        public virtual IList<ConversationRoom> Rooms { get; set; }       
+        //public ConversationRoom ConversationRoom { get; set; }       
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
         {

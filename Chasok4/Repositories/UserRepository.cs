@@ -35,6 +35,11 @@ namespace Chasok4.Repositories
             return db.Users.Find(userId);
         }
 
+        public AppUser GetUserByName(string name)
+        {
+            return db.Users.Where(x=>x.UserName == name).FirstOrDefault();
+        }
+
         public IEnumerable<AppUser> GetUsers()
         {
             return db.Users.ToList();

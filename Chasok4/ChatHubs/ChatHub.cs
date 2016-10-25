@@ -20,60 +20,11 @@ namespace Chasok4.ChatHubs
     {
         UnitOfWork uM = new UnitOfWork();
         static List<AppUser> ChatUsers = new List<AppUser>();
-              
-        //public void AddToRoom(string roomName)
-        //{
-        //    using (var db = new ApplicationDbContext())
-        //    {
-        //        // Retrieve room.
-        //        var room = db.Rooms.Find(roomName);
-
-        //        if (room != null)
-        //        {
-        //            var user = new AppUser() { UserName = Context.User.Identity.Name };
-        //            db.Users.Attach(user);
-
-        //            room.Users.Add(user);
-        //            db.SaveChanges();
-        //            Groups.Add(Context.ConnectionId, roomName);
-        //        }
-        //    }
-        //}
-
-        //public void RemoveFromRoom(string roomName)
-        //{
-        //    using (var db = new ApplicationDbContext())
-        //    {
-        //        // Retrieve room.
-        //        var room = db.Rooms.Find(roomName);
-        //        if (room != null)
-        //        {
-        //            var user = new AppUser() { UserName = Context.User.Identity.Name };
-        //            db.Users.Attach(user);
-
-        //            room.Users.Remove(user);
-        //            db.SaveChanges();
-
-        //            Groups.Remove(Context.ConnectionId, roomName);
-        //        }
-        //    }
-        //}
-
-
-        //public async Task JoinRoom(string roomName)
-        //{
-        //    await Groups.Add(Context.ConnectionId, roomName);
-        //    Clients.Group(roomName).addMessage(Context.User.Identity.Name + " joined.");
-        //}
-
-        //public Task LeaveRoom(string roomName)
-        //{
-        //    return Groups.Remove(Context.ConnectionId, roomName);
-        //}
+        ConversationRoom newConversationRoom = new ConversationRoom();
 
         public void Join(string roomName)
         {
-                Groups.Add(Context.ConnectionId, roomName);         
+            Groups.Add(Context.ConnectionId, roomName);
         }
 
         public void Send(MyMessage message)
@@ -82,12 +33,15 @@ namespace Chasok4.ChatHubs
 
             Message newMessage = new Message();
             UserMessage newUserMessage = new UserMessage();
-            newMessage.Body = message.Msg;
             
-            //newUserMessage.UserSendId = Context.ConnectionId;
+            
+            newMessage.Body = message.Msg;
+            newMessage.Friends = message.SelectedUsers;
+            newUserMessage.UserSendId = message.SenderId;
+            //newUserMessage.UserReceiveId = message. SenderId;
             newUserMessage.DataTimeSend = DateTime.Now.ToLocalTime();
             newUserMessage.DataTimeRead = DateTime.Now.ToLocalTime();
-            //newUserMessage.Message = newMessage;
+            newUserMessage.Message = newMessage;
 
 
             //newUserMessage.UserReceiveId = selectedInUsers[0];
@@ -97,6 +51,7 @@ namespace Chasok4.ChatHubs
                 uM.UserMessage.AddUserMessage(newUserMessage);
                 uM.Save();
             }
+           
             Clients.Group(message.Group).addMessage("Group message: "+message.Msg);
         }       
 

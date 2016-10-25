@@ -33,14 +33,15 @@ namespace Chasok4.Controllers
         [Authorize]
         public ActionResult Chat()
         {
-            var User = unitOfWork.User.GetUsers();
+            var myUser = unitOfWork.User.GetUsers();
             //IEnumerable<ApplicationUser> allUsers = userRep.GetUsers();
             ViewBag.UpperTitle = "Your Chat page.";
             //ViewBag.UserName = unitOfWork.User.User
             //ViewBag.ListOfMessages = unitOfWork.Message.GetMessages() ;
 
             ViewBag.getAllUsers = new SelectList(GetUsersFriends(), "Value", "Text");
-            return View(User);
+            ViewBag.userId = unitOfWork.User.GetUserByName(User.Identity.Name).Id;
+            return View(myUser);
         }
 
 

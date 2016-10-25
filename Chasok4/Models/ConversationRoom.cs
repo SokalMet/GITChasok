@@ -11,7 +11,10 @@ namespace Chasok4.Models
     {
         [Key]
             public string RoomName { get; set; }
-        public virtual IList<AppUser> Users { get; set; }
-        public virtual IList<Message> Messages { get; set; }
+        public ConversationRoom()
+        {
+            Users = new List<string>();
+        }
+        public virtual List<string> Users { get; set; }
     }
 }

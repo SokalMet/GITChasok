@@ -21,14 +21,14 @@ namespace Chasok4.Models.Entities
 
         public int MessageId { get; set; }
         [ForeignKey("MessageId")]
-        public Message Message { get; set; }        
-        
-        //public string UserSendId { get; set; }
-        //[ForeignKey("UserSendId")]        
-        //public AppUser AppUserS { get; set; }
+        public Message Message { get; set; }
 
-        //public List<string> UserReceiveId { get; set; }
-        //[ForeignKey("UserReceiveId")]        
-        //public AppUser AppUserR { get; set; }
+        public string UserSendId { get; set; }
+        [ForeignKey("UserSendId")]
+        public AppUser AppUserS { get; set; }
+
+        public string UserReceiveId { get; set; }
+        [ForeignKey("UserReceiveId")]
+        public AppUser AppUserR { get; set; }
     }
 }

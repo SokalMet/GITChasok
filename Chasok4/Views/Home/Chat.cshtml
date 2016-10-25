@@ -22,7 +22,8 @@
         <div id="selectedInUsersDiv"></div>
     </div>
     <div class="col-md-6">
-        <div id="chatBody" class="table-bordered">            
+        <div id="chatBody" class="table-bordered"> 
+            <input type="hidden" id="userId" value="@ViewBag.userId" />
             <input id="textUserName" value="@User.Identity.Name" hidden /><br>
             <div class="table-responsive">
                 <form action="" onsubmit="return false">

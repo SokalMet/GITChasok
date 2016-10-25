@@ -10,5 +10,7 @@ namespace Chasok4.Models
         public string Msg { get; set; }
         public string Group { get; set; }
         public List<string> SelectedUsers { get; set; }
+        public string SenderId { get; set; }
+        public string SenderName { get; set; }
     }
 }
