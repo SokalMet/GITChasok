@@ -41,6 +41,7 @@ namespace Chasok4.Controllers
 
             ViewBag.getAllUsers = new SelectList(GetUsersFriends(), "Value", "Text");
             ViewBag.userId = unitOfWork.User.GetUserByName(User.Identity.Name).Id;
+            
             return View(myUser);
         }
 

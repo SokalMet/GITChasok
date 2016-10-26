@@ -44,15 +44,16 @@ namespace Chasok4.ChatHubs
             newUserMessage.Message = newMessage;
 
 
-            //newUserMessage.UserReceiveId = selectedInUsers[0];
-            if (newMessage != null)
-            {
-                uM.Message.AddMessage(newMessage);
-                uM.UserMessage.AddUserMessage(newUserMessage);
-                uM.Save();
-            }
+            //Saving all to database
+            //if (newMessage != null)
+            //{
+            //    uM.Message.AddMessage(newMessage);
+            //    uM.UserMessage.AddUserMessage(newUserMessage);
+            //    uM.Save();
+            //}
            
-            Clients.Group(message.Group).addMessage("Group message: "+message.Msg);
+            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName +": "+message.Msg);
+            Clients.Client(Context.ConnectionId).myMessage("My message: " + message.Msg);
         }       
 
         // Подключение нового пользователя

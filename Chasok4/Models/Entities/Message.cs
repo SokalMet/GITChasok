@@ -9,7 +9,7 @@ namespace Chasok4.Models.Entities
     {       
         public int Id { get; set; }
         public string Body { get; set; }
-        public virtual IList<ConversationRoom> Rooms { get; set; }
+        public string RoomName { get; set; }
         public List<string> Friends { get; set; }
     }
 }

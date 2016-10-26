@@ -11,10 +11,7 @@ namespace Chasok4.Models
     {
         [Key]
             public string RoomName { get; set; }
-        public ConversationRoom()
-        {
-            Users = new List<string>();
-        }
-        public virtual List<string> Users { get; set; }
+       
+        public List<string> Users { get; set; }
     }
 }
