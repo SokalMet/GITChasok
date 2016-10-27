@@ -190,25 +190,29 @@
     <Compile Include="Migrations\201609291348467_ModelsFix.Designer.cs">
       <DependentUpon>201609291348467_ModelsFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610260928599_NewModels.cs" />
+    <Compile Include="Migrations\201610260928599_NewModels.Designer.cs">
+      <DependentUpon>201610260928599_NewModels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Entities\Message.cs" />
     <Compile Include="Models\Entities\AppUser.cs" />
-    <Compile Include="Models\Entities\UserMessage.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Entities\UserMessage.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\ConversationRoom.cs" />
     <Compile Include="Models\MyMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IMessageRepository.cs" />
+    <Compile Include="Repositories\IUserMessageRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
     <Compile Include="Repositories\MessageRepository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\UserMessageRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +299,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201609291348467_ModelsFix.resx">
       <DependentUpon>201609291348467_ModelsFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610260928599_NewModels.resx">
+      <DependentUpon>201610260928599_NewModels.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

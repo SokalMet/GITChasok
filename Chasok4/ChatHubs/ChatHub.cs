@@ -18,10 +18,8 @@ namespace Chasok4.ChatHubs
     [HubName("ChatHub")]
     public class ChatHub : Hub
     {
-        UnitOfWork uM = new UnitOfWork();
-        static List<AppUser> ChatUsers = new List<AppUser>();
-        ConversationRoom newConversationRoom = new ConversationRoom();
-
+        public UnitOfWork uM = new UnitOfWork();
+        
         public void Join(string roomName)
         {
             Groups.Add(Context.ConnectionId, roomName);
@@ -29,62 +27,35 @@ namespace Chasok4.ChatHubs
 
         public void Send(MyMessage message)
         {
-            //Clients.All.addMessage(message.Msg);
-
+            var allUsers = uM.User.GetUsers();
+            AppUser currentUser = uM.User.GetUserById(message.SenderId);
             Message newMessage = new Message();
-            UserMessage newUserMessage = new UserMessage();
-            
-            
-            newMessage.Body = message.Msg;
-            newMessage.Friends = message.SelectedUsers;
-            newUserMessage.UserSendId = message.SenderId;
-            //newUserMessage.UserReceiveId = message. SenderId;
-            newUserMessage.DataTimeSend = DateTime.Now.ToLocalTime();
-            newUserMessage.DataTimeRead = DateTime.Now.ToLocalTime();
-            newUserMessage.Message = newMessage;
 
+            newMessage.Body = message.Msg;
+            newMessage.CreateDate = DateTime.Now.ToLocalTime();
+            newMessage.Creator = currentUser;
+
+            currentUser.MessageToSend = newMessage;
+
+
+            foreach (AppUser u in allUsers)
+            {
+                if (message.SelectedUsers.Equals(u.UserName))
+                {
+                    u.IncomeMessages.Add(newMessage);
+                }
+            }
 
             //Saving all to database
-            //if (newMessage != null)
-            //{
-            //    uM.Message.AddMessage(newMessage);
-            //    uM.UserMessage.AddUserMessage(newUserMessage);
-            //    uM.Save();
-            //}
-           
-            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName +": "+message.Msg);
-            Clients.Client(Context.ConnectionId).myMessage("My message: " + message.Msg);
-        }       
-
-        // Подключение нового пользователя
-        public void Connect(string userName)
-        {
-            var id = Context.ConnectionId;
-
-            if (!ChatUsers.Any(x => x.Id == id))
+            if (newMessage != null)
             {
-                ChatUsers.Add(new AppUser { Id = id, UserName = userName });
-
-                // Посылаем сообщение текущему пользователю
-                Clients.Caller.onConnected(id, userName, ChatUsers);
-
-                // Посылаем сообщение всем пользователям, кроме текущего
-                Clients.AllExcept(id).onNewUserConnected(id, userName);
-            }
-        }
-
-        // Отключение пользователя
-        public override Task OnDisconnected(bool stopCalled)
-        {
-            var item = ChatUsers.FirstOrDefault(x => x.Id == Context.ConnectionId);
-            if (item != null)
-            {
-                ChatUsers.Remove(item);
-                var id = Context.ConnectionId;
-                Clients.All.onUserDisconnected(id, item.UserName);
+                uM.Message.AddMessage(newMessage);
+                uM.User.UpdateUser(currentUser);
+                uM.Save();
             }
 
-            return base.OnDisconnected(stopCalled);
-        }
+            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName + ": " + message.Msg);
+            Clients.Client(Context.ConnectionId).myMessage("My message: " + message.Msg );
+        } 
     }
 }

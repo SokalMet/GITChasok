@@ -14,8 +14,9 @@ namespace Chasok4.Models.Entities
     {
         public string NickName { get; set; } 
         //public ConversationRoom ConversationRoom { get; set; }       
+        //public virtual Message MessageToSend { get; set; }
 
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
+    public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);

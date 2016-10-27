@@ -14,7 +14,7 @@ namespace Chasok4.DAL
 
         public DbSet<Message> Messages { get; set; }
         public DbSet<UserMessage> UserMessages { get; set; }
-        public DbSet<ConversationRoom> Rooms { get; set; }
+        //public DbSet<ConversationRoom> Rooms { get; set; }
 
         public ApplicationDbContext()
                 : base("ConnectionToChasok", throwIfV1Schema: false)

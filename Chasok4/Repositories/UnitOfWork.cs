@@ -10,19 +10,10 @@ namespace Chasok4.Repositories
     public class UnitOfWork : IDisposable
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private UserMessageRepository userMessageRepository;
         private MessageRepository messageRepository;
         private UserRepository userRepository;
+        private UserMessageRepository userMessageRepository;
 
-        public UserMessageRepository UserMessage
-        {
-            get
-            {
-                if (userMessageRepository == null)
-                    userMessageRepository = new UserMessageRepository(db);
-                return userMessageRepository;
-            }
-        }
         public MessageRepository Message
         {
             get
@@ -39,6 +30,16 @@ namespace Chasok4.Repositories
                 if (userRepository == null)
                     userRepository = new UserRepository(db);
                 return userRepository;
+            }
+        }
+
+        public UserMessageRepository UserMessage
+        {
+            get
+            {
+                if (userMessageRepository == null)
+                    userMessageRepository = new UserMessageRepository(db);
+                return userMessageRepository;
             }
         }
 

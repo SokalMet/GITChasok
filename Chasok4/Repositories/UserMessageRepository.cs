@@ -1,13 +1,13 @@
-﻿using Chasok4.DAL;
-using Chasok4.Models.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Chasok4.Models.Entities;
+using Chasok4.DAL;
 
 namespace Chasok4.Repositories
 {
-    public class UserMessageRepository
+    public class UserMessageRepository : IUserMessageRepository
     {
         private ApplicationDbContext db;
 
@@ -15,22 +15,20 @@ namespace Chasok4.Repositories
         {
             this.db = new ApplicationDbContext();
         }
-
         public UserMessageRepository(ApplicationDbContext db)
         {
             this.db = db;
         }
-
-        public void DeleteUserMessage(int usermessageId)
+        public void DeleteUserMessage(int userMessageId)
         {
-            UserMessage usermessage = db.UserMessages.Find(usermessageId);
-            if(usermessage!=null)
-            db.UserMessages.Remove(usermessage);
+            UserMessage userMessage = db.UserMessages.Find(userMessageId);
+            if (userMessage != null)
+                db.UserMessages.Remove(userMessage);
         }
 
-        public UserMessage GetUserMessageById(int usermessageId)
+        public UserMessage GetUserMessageById(int userMessageId)
         {
-            return db.UserMessages.Find(usermessageId);
+            return db.UserMessages.Find(userMessageId);
         }
 
         public IEnumerable<UserMessage> GetUserMessages()
@@ -38,15 +36,14 @@ namespace Chasok4.Repositories
             return db.UserMessages.ToList();
         }
 
-        public void AddUserMessage(UserMessage usermessage)
+        public void AddUserMessage(UserMessage userMessage)
         {
-            db.UserMessages.Add(usermessage);
+            db.UserMessages.Add(userMessage);
         }
-       
 
-        public void UpdateUserMessage(UserMessage usermessage)
+        public void UpdateUserMessage(UserMessage userMessage)
         {
-            db.Entry(usermessage).State = System.Data.Entity.EntityState.Modified;
+            db.Entry(userMessage).State = System.Data.Entity.EntityState.Modified;
         }
     }
 }

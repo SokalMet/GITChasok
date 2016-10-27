@@ -23,7 +23,7 @@
             // Вызываем у хаба метод Send
             chat.server.send(
                 {
-                    Msg: $('#message').val(),
+                    Msg: $('#message').val(),                     
                     Group: $('#textUserName').val(),
                     SelectedUsers: selectedInUsers,
                     SenderId: $('#userId').val(),
