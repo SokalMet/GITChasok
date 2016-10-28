@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title in Chasok</title>
@@ -9,47 +9,48 @@
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body> 
+<body>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-          
+
     <div class="container body-content">
         <div class="navbar navbar-inverse ">
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Chasok", "Index", "Home")</li>               
+                <li>@Html.ActionLink("Chasok", "Index", "Home")</li>
                 <li>@Html.ActionLink("Chat", "Chat", "Home")</li>
-                <li><a href="#">Income Message<span class="badge" id="cell">0</span></a></li>               
+                <li><a href="#">Income Message<span class="badge" id="cell">0</span></a></li>
             </ul>
             <ul class="nav navbar-nav tab-content">
                 @Html.Partial("_LoginPartial");
             </ul>
         </div>
-        
-        <div class="col-md-11">            
-              @RenderBody()            
+
+        <div class="col-md-11">
+            @RenderBody()
         </div>
-        <hr />      
-        
+        <hr />
+
     </div>
     <footer class="col-md-12">
-        <div >
+        <div>
             <p>&copy; @DateTime.Now.Year – Chasok</p>
         </div>
     </footer>
 
-    <script>
-        function updateTimer() {
-        var cell = document.getElementById('cell');
-        var count = Number(cell.innerHTML);
+    @*<script>
+            function updateTimer() {
+            var cell = document.getElementById('cell');
+            var count = Number(cell.innerHTML);
 
-        cell.innerHTML = count += 1;
-        };
+            cell.innerHTML = count += 1;
+            };
 
-        setInterval(updateTimer, 1000);
+            setInterval(updateTimer, 1000);
 
-        
-    </script>
+
+        </script>*@
+
     
 </body>
 </html>

@@ -7,18 +7,18 @@ namespace Chasok4.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ModelsFix : IMigrationMetadata
+    public sealed partial class GoodModelNow : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ModelsFix));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(GoodModelNow));
         
         string IMigrationMetadata.Id
         {
-            get { return "201609291348467_ModelsFix"; }
+            get { return "201610280726146_GoodModelNow"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return Resources.GetString("Source"); }
+            get { return null; }
         }
         
         string IMigrationMetadata.Target

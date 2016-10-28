@@ -12,9 +12,15 @@ namespace Chasok4.Models.Entities
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
     public class AppUser : IdentityUser
     {
+        public AppUser()
+        {
+            Messages = new HashSet<Message>();
+            UserMessages = new HashSet<UserMessage>();
+        }
         public string NickName { get; set; } 
         //public ConversationRoom ConversationRoom { get; set; }       
-        //public virtual Message MessageToSend { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<UserMessage> UserMessages { get; set; }
 
     public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
         {

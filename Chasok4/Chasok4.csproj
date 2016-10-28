@@ -186,13 +186,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
-    <Compile Include="Migrations\201609291348467_ModelsFix.cs" />
-    <Compile Include="Migrations\201609291348467_ModelsFix.Designer.cs">
-      <DependentUpon>201609291348467_ModelsFix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610260928599_NewModels.cs" />
-    <Compile Include="Migrations\201610260928599_NewModels.Designer.cs">
-      <DependentUpon>201610260928599_NewModels.cs</DependentUpon>
+    <Compile Include="Migrations\201610280726146_GoodModelNow.cs" />
+    <Compile Include="Migrations\201610280726146_GoodModelNow.Designer.cs">
+      <DependentUpon>201610280726146_GoodModelNow.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Entities\Message.cs" />
@@ -297,11 +293,8 @@
     <Content Include="Scripts\jquery-2.2.3.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201609291348467_ModelsFix.resx">
-      <DependentUpon>201609291348467_ModelsFix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610260928599_NewModels.resx">
-      <DependentUpon>201610260928599_NewModels.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201610280726146_GoodModelNow.resx">
+      <DependentUpon>201610280726146_GoodModelNow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

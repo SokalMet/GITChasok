@@ -10,9 +10,10 @@ namespace Chasok4.Models.Entities
         public int Id { get; set; }
         public bool ReadStatus { get; set; } = false;
 
-        public AppUser Creator { get; set; }
-
+        public int MessageToId { get; set; }
+        public Message MessageTo { get; set; } 
+               
         public string ReceiverId { get; set; }
-        public IList<AppUser> receiver { get; set; }        
-    }
+        public AppUser Receiver { get; set; }
+     }
 }

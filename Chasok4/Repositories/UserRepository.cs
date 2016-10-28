@@ -27,7 +27,7 @@ namespace Chasok4.Repositories
         {
             AppUser user = db.Users.Find(userId);
             if (user!=null)
-            db.Users.Remove(user);
+            db.Users.Remove(user); 
         }
 
         public AppUser GetUserById(string userId)
