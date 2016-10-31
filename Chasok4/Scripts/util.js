@@ -13,7 +13,7 @@
     };
     chat.client.myMessage = function (message) {
         // Добавление сообщений на веб-страницу         
-        $('#chatroom').append('<p class="text-danger"><b>' + htmlEncode(message) + '</p>');        
+        $('#chatroom').append('<p class="text-danger bg-info"><b>' + htmlEncode(message) + '</p>');        
     };
     
     // Функция, вызываемая при подключении нового пользователя

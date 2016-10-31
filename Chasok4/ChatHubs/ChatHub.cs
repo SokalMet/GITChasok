@@ -21,34 +21,22 @@ namespace Chasok4.ChatHubs
         static List<AppUser> ChatUsers = new List<AppUser>();
         static UnitOfWork uM = new UnitOfWork();
         IEnumerable<AppUser> allUsers = uM.User.GetUsers();
-        Message newMessage = new Message();
-
-        public void Join(string roomName)
+        
+        public void SaveToDb(MyMessage message)
         {
-            Groups.Add(Context.ConnectionId, roomName);            
-        }
-
-        public void Send(MyMessage message)
-        {
-            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName + ":\n" + message.Msg);
-            Clients.Client(Context.ConnectionId).myMessage("My message:\n" + message.Msg);
-
-
-            
+            Message newMessage = new Message();
             AppUser currentUser = uM.User.GetUserById(message.SenderId);
-           
-            
 
             newMessage.Body = message.Msg;
             newMessage.CreateDate = DateTime.Now.ToLocalTime();
             newMessage.CreatorId = message.SenderId;
             uM.Message.AddMessage(newMessage);
-                        
+
             foreach (AppUser receaverUser in allUsers)
             {
                 string b = receaverUser.Email;
                 foreach (string a in message.SelectedUsers)
-                    if (a==b)
+                    if (a == b)
                     {
                         UserMessage newUserMessage = new UserMessage();
                         newUserMessage.MessageTo = newMessage;
@@ -58,10 +46,19 @@ namespace Chasok4.ChatHubs
             }
             uM.Save();
         }
+        public void Join(string roomName)
+        {
+            Groups.Add(Context.ConnectionId, roomName);            
+        }
+
+        public void Send(MyMessage message)
+        {
+            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName + ":\n" + message.Msg);
+            Clients.Client(Context.ConnectionId).myMessage("Me:\n" + message.Msg);            
+        }
+
 
             private static List<string> users = new List<string>();
-
-
         public void Connect(string userId, string userName)
         {
             UserMessage userMessage = new UserMessage();

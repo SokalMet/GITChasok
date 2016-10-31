@@ -4,7 +4,7 @@
      ViewBag.Title = "Chat";
 }
 
-<div class="jumbotron text-center text-success">
+<div class="text-center text-success">
     <h2>@ViewBag.UpperTitle</h2>
 </div>
 
@@ -17,25 +17,24 @@
 </div>
 <div id="chatusers" hidden>
 </div>
-<div class="row" >
-    <div class="col-md-4 col-md-offset-1">
-        <br/>
+<div class="row" style="padding:1%">
+    <div class="col-md-4">
         <div id="selectedInUsersDiv"></div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8 col-md-offset-4" >
         <div id="chatBody" class="table-bordered" onmouseover="cleanFunction()"> 
             <input type="hidden" id="userId" value="@ViewBag.userId" />
             <input id="textUserName" value="@User.Identity.Name" hidden /><br>
-            <div class="table-responsive">
+            @*<div>*@
                 <form action="" onsubmit="return false">
                     <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:100%; max-height:100%;"></textarea>
                     <br>
                     <button class="btn btn-success" value="Send" id="sendmessage">Send</button>
-                    <br />
-                    <div  style="white-space:pre-wrap" id="chatroom">                        
+                    <br>
+                    <div  class="table table-responsive" style="max-height:80%; white-space:pre-wrap;" id="chatroom">                        
                     </div>
                 </form>
-            </div>
+            @* </div> *@
            
             <hr />
         </div>

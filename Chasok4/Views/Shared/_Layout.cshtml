@@ -21,7 +21,7 @@
                 <li>@Html.ActionLink("Chat", "Chat", "Home")</li>
                 <li><a href="#">Income Message<span class="badge" id="cell">0</span></a></li>
             </ul>
-            <ul class="nav navbar-nav tab-content">
+            <ul class="nav navbar-nav" style="padding-left:5%">
                 @Html.Partial("_LoginPartial");
             </ul>
         </div>
@@ -29,7 +29,6 @@
         <div class="col-md-11">
             @RenderBody()
         </div>
-        <hr />
 
     </div>
     <footer class="col-md-12">
