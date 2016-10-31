@@ -28,7 +28,7 @@ namespace Chasok4.ChatHubs
             AppUser currentUser = uM.User.GetUserById(message.SenderId);
 
             newMessage.Body = message.Msg;
-            newMessage.CreateDate = DateTime.Now.ToLocalTime();
+            newMessage.CreateDate = message.CreateDate.ToLocalTime();
             newMessage.CreatorId = message.SenderId;
             uM.Message.AddMessage(newMessage);
 
@@ -39,13 +39,16 @@ namespace Chasok4.ChatHubs
                     if (a == b)
                     {
                         UserMessage newUserMessage = new UserMessage();
-                        newUserMessage.MessageTo = newMessage;
+                        newUserMessage.Message = newMessage;
                         newUserMessage.Receiver = receaverUser;
                         uM.UserMessage.AddUserMessage(newUserMessage);
                     }
             }
             uM.Save();
         }
+
+
+
         public void Join(string roomName)
         {
             Groups.Add(Context.ConnectionId, roomName);            
@@ -57,37 +60,41 @@ namespace Chasok4.ChatHubs
             Clients.Client(Context.ConnectionId).myMessage("Me:\n" + message.Msg);            
         }
 
-
-            private static List<string> users = new List<string>();
-        public void Connect(string userId, string userName)
+        public override Task OnConnected()
         {
-            UserMessage userMessage = new UserMessage();
-                userMessage = uM.UserMessage.GetUserMessages().SingleOrDefault(u=>u.ReceiverId==userId);
-
-            var id = Context.ConnectionId;
-
-            if (!ChatUsers.Any(x => x.Id == id))
-            {
-                ChatUsers.Add(new AppUser { Id = id, UserName = userName });
-
-                // Посылаем сообщение текущему пользователю
-                Clients.Caller.onConnected(id, userName, ChatUsers);
-            }
+            return base.OnConnected();
         }
 
-        // Отключение пользователя
-        public override Task OnDisconnected(bool stopCalled)
-        {
-            var item = ChatUsers.FirstOrDefault(x => x.Id == Context.ConnectionId);
-            if (item != null)
-            {
-                ChatUsers.Remove(item);
-                var id = Context.ConnectionId;
-                Clients.All.onUserDisconnected(id, item.UserName);
-            }
+        //private static List<string> users = new List<string>();
+        //public void Connect(string userId, string userName)
+        //{
+        //    UserMessage userMessage = new UserMessage();
+        //        userMessage = uM.UserMessage.GetUserMessages().SingleOrDefault(u=>u.ReceiverId==userId);
 
-            return base.OnDisconnected(stopCalled);
-        }
+        //    var id = Context.ConnectionId;
+
+        //    if (!ChatUsers.Any(x => x.Id == id))
+        //    {
+        //        ChatUsers.Add(new AppUser { Id = id, UserName = userName });
+
+        //        // Посылаем сообщение текущему пользователю
+        //        Clients.Caller.onConnected(id, userName, ChatUsers);
+        //    }
+        //}
+
+        //// Отключение пользователя
+        //public override Task OnDisconnected(bool stopCalled)
+        //{
+        //    var item = ChatUsers.FirstOrDefault(x => x.Id == Context.ConnectionId);
+        //    if (item != null)
+        //    {
+        //        ChatUsers.Remove(item);
+        //        var id = Context.ConnectionId;
+        //        Clients.All.onUserDisconnected(id, item.UserName);
+        //    }
+
+        //    return base.OnDisconnected(stopCalled);
+        //}
 
     }
 }
