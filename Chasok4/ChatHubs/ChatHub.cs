@@ -18,8 +18,11 @@ namespace Chasok4.ChatHubs
     [HubName("ChatHub")]
     public class ChatHub : Hub
     {
-        public UnitOfWork uM = new UnitOfWork();
-                
+        static List<AppUser> ChatUsers = new List<AppUser>();
+        static UnitOfWork uM = new UnitOfWork();
+        IEnumerable<AppUser> allUsers = uM.User.GetUsers();
+        Message newMessage = new Message();
+
         public void Join(string roomName)
         {
             Groups.Add(Context.ConnectionId, roomName);            
@@ -27,20 +30,23 @@ namespace Chasok4.ChatHubs
 
         public void Send(MyMessage message)
         {
-            IEnumerable<AppUser> allUsers = uM.User.GetUsers();
+            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName + ":\n" + message.Msg);
+            Clients.Client(Context.ConnectionId).myMessage("My message:\n" + message.Msg);
+
+
+            
             AppUser currentUser = uM.User.GetUserById(message.SenderId);
-            Message newMessage = new Message();
+           
             
 
             newMessage.Body = message.Msg;
             newMessage.CreateDate = DateTime.Now.ToLocalTime();
             newMessage.CreatorId = message.SenderId;
             uM.Message.AddMessage(newMessage);
-             
-            string b;
+                        
             foreach (AppUser receaverUser in allUsers)
             {
-                b = receaverUser.Email;
+                string b = receaverUser.Email;
                 foreach (string a in message.SelectedUsers)
                     if (a==b)
                     {
@@ -51,29 +57,38 @@ namespace Chasok4.ChatHubs
                     }
             }
             uM.Save();
-            
-
-            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName + ":\n" + message.Msg);
-            Clients.Client(Context.ConnectionId).myMessage("My message:\n" + message.Msg);
         }
 
             private static List<string> users = new List<string>();
-        public override Task OnConnected()
+
+
+        public void Connect(string userId, string userName)
         {
-            users.Add(Context.ConnectionId);
-            return base.OnConnected();
+            UserMessage userMessage = new UserMessage();
+                userMessage = uM.UserMessage.GetUserMessages().SingleOrDefault(u=>u.ReceiverId==userId);
+
+            var id = Context.ConnectionId;
+
+            if (!ChatUsers.Any(x => x.Id == id))
+            {
+                ChatUsers.Add(new AppUser { Id = id, UserName = userName });
+
+                // Посылаем сообщение текущему пользователю
+                Clients.Caller.onConnected(id, userName, ChatUsers);
+            }
         }
 
-        ////SignalR Verions 1 Signature
-        //public override Task OnDisconnected()
-        //{
-        //    users.Remove(Context.ConnectionId);
-        //    return base.OnDisconnected();
-        //}
-
-        //SignalR Version 2 Signature
+        // Отключение пользователя
         public override Task OnDisconnected(bool stopCalled)
         {
+            var item = ChatUsers.FirstOrDefault(x => x.Id == Context.ConnectionId);
+            if (item != null)
+            {
+                ChatUsers.Remove(item);
+                var id = Context.ConnectionId;
+                Clients.All.onUserDisconnected(id, item.UserName);
+            }
+
             return base.OnDisconnected(stopCalled);
         }
 
