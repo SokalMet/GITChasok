@@ -26,16 +26,18 @@
             </ul>
         </div>
 
-        <div class="col-md-11">
+        <div class="col-md-12">
             @RenderBody()
         </div>
 
+
+        <footer class="col-md-12">
+            <div>
+                <p>&copy; @DateTime.Now.Year – Chasok</p>
+            </div>
+        </footer>
     </div>
-    <footer class="col-md-12">
-        <div>
-            <p>&copy; @DateTime.Now.Year – Chasok</p>
-        </div>
-    </footer>
+    
 
     @*<script>
             function updateTimer() {

@@ -45,9 +45,7 @@ namespace Chasok4.ChatHubs
                     }
             }
             uM.Save();
-        }
-
-
+        }        
 
         public void Join(string roomName)
         {
@@ -62,6 +60,8 @@ namespace Chasok4.ChatHubs
 
         public override Task OnConnected()
         {
+            var id = Context.ConnectionId;
+            Clients.Client(Context.ConnectionId).onConnected("Hello To you");
             return base.OnConnected();
         }
 

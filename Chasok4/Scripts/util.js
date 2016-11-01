@@ -2,6 +2,13 @@
 
     // Ссылка на автоматически-сгенерированный прокси хаба
     var chat = $.connection.ChatHub;
+
+    chat.client.onConnected = function (message) {
+        // Добавление сообщений на веб-страницу
+        var datetime = new Date().toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+        var dateyear = new Date().toLocaleDateString();
+        $('#chatroom').prepend('<span>' + ' (' + dateyear + ') ' + datetime + '</span>' + '<div>' + message + '</div>');
+    };
     // Объявление функции, которая вызывает хаб при получении сообщений
     chat.client.addMessage = function (message) {
         // Добавление сообщений на веб-страницу         

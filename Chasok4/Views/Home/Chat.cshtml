@@ -8,121 +8,119 @@
     <h2>@ViewBag.UpperTitle</h2>
 </div>
 
-<div class="row">    
-    <div class="col-md-12" >
+<input id="chatusers" hidden />
+<input type="hidden" id="userId" value="@ViewBag.userId" />
+<input id="textUserName" value="@User.Identity.Name" hidden />
+
+<div class="row">
+    <div class="col-md-4" style="border:double">
         <label for="getAllUsers">Select users You want talk to</label>
-        @Html.DropDownList("getAllUsers", null, "Users", new { })       
+        @Html.DropDownList("getAllUsers", null, "Users", new { })
     </div>
-    
-</div>
-<div id="chatusers" hidden>
-</div>
-<div class="row" style="padding:1%">
-    <div class="col-xs-4">
+</div>    
+
+<div class="row">
+    <div class="col-md-4" style="border:double">
         <div id="selectedInUsersDiv"></div>
     </div>
-    <div class="col-xs-8 col-xs-offset-4" >
-        <div id="chatBody" class="table-bordered" onmouseover="cleanFunction()"> 
-            <input type="hidden" id="userId" value="@ViewBag.userId" />
-            <input id="textUserName" value="@User.Identity.Name" hidden /><br>
-            @*<div>*@
+
+    <div class="col-md-6 col-md-offset-1" style="border:double">
+        <div id="chatBody" onmouseover="cleanFunction()" style="min-height:500px" >
+            <div>
                 <form action="" onsubmit="return false">
+                    <div style="overflow-y:scroll; max-height:300px; max-width:inherit" id="chatroom"> </div>
+                    <hr style="border:double">
                     <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:100%;"></textarea>
                     <br>
                     <button class="btn btn-success" value="Send" id="sendmessage">Send</button>
-                    <br>
-                    <div  class="table-responsive" style="max-height:300px" id="chatroom">    
-                    </div>
                 </form>
-            @* </div> *@
-           
-            <hr />
+            </div>
         </div>
-
     </div>
 </div>
 
 
-<script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
-<script src="~/signalr/hubs"></script>
-<script src="~/Scripts/util.js"></script>
-<script>
 
-    function cleanFunction() {
-        $("#cell").text('0');
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/util.js"></script>
+    <script>
 
-        //document.getElementById("cell").innerHTML = 0;
-    }
+        function cleanFunction() {
+            $("#cell").text('0');
 
-    var selectedInUsers = [];    
-    $("#getAllUsers").change(function () {
-        selectedInUsers.push($("#getAllUsers").val());
-        for (var i = 0; i < $("#getAllUsers")[0].length; i++) {
-            if ($("#getAllUsers")[0][i].value == $("#getAllUsers").val()) {
-                $("#getAllUsers")[0].remove(i);
+            //document.getElementById("cell").innerHTML = 0;
+        }
+
+        var selectedInUsers = [];
+        $("#getAllUsers").change(function () {
+            selectedInUsers.push($("#getAllUsers").val());
+            for (var i = 0; i < $("#getAllUsers")[0].length; i++) {
+                if ($("#getAllUsers")[0][i].value == $("#getAllUsers").val()) {
+                    $("#getAllUsers")[0].remove(i);
+                }
+            }
+            renderSelectedUsers();
+        });
+
+        function renderSelectedUsers() {
+            $("#selectedInUsersDiv").html("");
+            for (var i = 0; i < selectedInUsers.length ; i++) {
+                $("#selectedInUsersDiv").append("<div><input readonly type=\"text\" width=\"200px\" id=\"checkedUser\" value=\"" + selectedInUsers[i]
+                    + "\"/><button type=\"button\" class=\"glyphicon glyphicon-trash\" onclick=\"removeSelectedUser('"
+                    + selectedInUsers[i].toString() + "')\"></button> </div>  ");
             }
         }
-        renderSelectedUsers();
-    });
 
-    function renderSelectedUsers() {
-        $("#selectedInUsersDiv").html("");
-        for (var i = 0; i < selectedInUsers.length ; i++) {
-            $("#selectedInUsersDiv").append("<div><input readonly type=\"text\" width=\"200px\" id=\"checkedUser\" value=\"" + selectedInUsers[i]
-                + "\"/><button type=\"button\" class=\"glyphicon glyphicon-trash\" onclick=\"removeSelectedUser('"
-                + selectedInUsers[i].toString() + "')\"></button> </div>  ");
-        }        
-    }
-   
-    function removeSelectedUser(e) {
-        for (var i = 0; i < selectedInUsers.length; i++) {
-            if (selectedInUsers[i] == e) {
-                var opt = '<option value="' + e + '">' + e + '</option>';
-                $("#getAllUsers").append(opt);
-                selectedInUsers.splice(i, 1);
+        function removeSelectedUser(e) {
+            for (var i = 0; i < selectedInUsers.length; i++) {
+                if (selectedInUsers[i] == e) {
+                    var opt = '<option value="' + e + '">' + e + '</option>';
+                    $("#getAllUsers").append(opt);
+                    selectedInUsers.splice(i, 1);
+                }
             }
+            renderSelectedUsers();
         }
-        renderSelectedUsers();
-    }
-    
 
 
-</script>
+
+    </script>
 
 
     @*<script>
-        var socket,
-            $txt = document.getElementById('message'),
-            $user = document.getElementById('user'),
-            $messages = document.getElementById('messages');                        
-            
-        //if (typeof (WebSocket) !== 'undefined') {
-        //    socket = new WebSocket("ws://localhost/Chasok4/ChatHandler.ashx");            
-        //} else {
-        //    socket = new MozWebSocket("ws://localhost/Chasok4/ChatHandler.ashx");            
-        //}
+            var socket,
+                $txt = document.getElementById('message'),
+                $user = document.getElementById('user'),
+                $messages = document.getElementById('messages');
 
-        //socket.onmessage = function (msg) {
-        //    var $el = document.createElement('p');
-        //    $el.innerHTML = msg.data;
-        //    $messages.appendChild($el);            
-        //};
+            //if (typeof (WebSocket) !== 'undefined') {
+            //    socket = new WebSocket("ws://localhost/Chasok4/ChatHandler.ashx");
+            //} else {
+            //    socket = new MozWebSocket("ws://localhost/Chasok4/ChatHandler.ashx");
+            //}
 
-        //socket.onclose = function (event) {
-        //    alert('Мы потеряли её. Пожалуйста, обновите страницу');
-        //};
+            //socket.onmessage = function (msg) {
+            //    var $el = document.createElement('p');
+            //    $el.innerHTML = msg.data;
+            //    $messages.appendChild($el);
+            //};
 
-        //document.getElementById('send').onclick = function () {
-        //    socket.send($user.value + ' : ' + $txt.value );
-        //    $txt.value = '';            
-        //};        
-        function updateTimer() {
-            var cell = document.getElementById('cell');
-            var count = Number(cell.innerHTML);
+            //socket.onclose = function (event) {
+            //    alert('Мы потеряли её. Пожалуйста, обновите страницу');
+            //};
 
-            cell.innerHTML = count += 1;
-        };
-       
-        setInterval(updateTimer, 1000);
-    </script>*@
+            //document.getElementById('send').onclick = function () {
+            //    socket.send($user.value + ' : ' + $txt.value );
+            //    $txt.value = '';
+            //};
+            function updateTimer() {
+                var cell = document.getElementById('cell');
+                var count = Number(cell.innerHTML);
+
+                cell.innerHTML = count += 1;
+            };
+
+            setInterval(updateTimer, 1000);
+        </script>*@
 
