@@ -18,7 +18,7 @@ namespace Chasok4.ChatHubs
     [HubName("ChatHub")]
     public class ChatHub : Hub
     {
-        static List<AppUser> ChatUsers = new List<AppUser>();
+        //static List<AppUser> ChatUsers = new List<AppUser>();
         static UnitOfWork uM = new UnitOfWork();
         IEnumerable<AppUser> allUsers = uM.User.GetUsers();
         
@@ -58,13 +58,18 @@ namespace Chasok4.ChatHubs
             Clients.Client(Context.ConnectionId).myMessage(new { forWho = "Me:", mess = message.Msg });            
         }
 
-        public override Task OnConnected()
-        {
+        public void OnConnected(string userId)
+        {            
             //var id = Context.ConnectionId;
-            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages();
-            Clients.Client(Context.ConnectionId).onConnected("Hello To you");
-            return base.OnConnected();
+            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId);
+            IEnumerable<Message> allMessages = uM.Message.GetMessages();
+            foreach (var item in allMessages)
+            {
+                Clients.Client(Context.ConnectionId).onConnected(item.Body);
+            }           
         }
+
+
 
         //private static List<string> users = new List<string>();
         //public void Connect(string userId, string userName)
