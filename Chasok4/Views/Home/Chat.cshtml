@@ -25,14 +25,14 @@
     </div>
 
     <div class="col-md-6 col-md-offset-1" style="border:double">
-        <div id="chatBody" onmouseover="cleanFunction()" style="min-height:500px" >
+        <div id="chatBody" onmouseover="cleanFunction()">
             <div>
                 <form action="" onsubmit="return false">
-                    <div style="overflow-y:scroll; max-height:300px; max-width:inherit" id="chatroom"> </div>
-                    <hr style="border:double">
                     <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:100%;"></textarea>
                     <br>
                     <button class="btn btn-success" value="Send" id="sendmessage">Send</button>
+                    <br>
+                    <div style="overflow-y:scroll; max-height:300px; max-width:inherit" id="chatroom"> </div>
                 </form>
             </div>
         </div>

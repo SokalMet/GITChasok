@@ -3,10 +3,11 @@
     // Ссылка на автоматически-сгенерированный прокси хаба
     var chat = $.connection.ChatHub;
 
+    var datetime = new Date().toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    var dateyear = new Date().toLocaleDateString();
+
     chat.client.onConnected = function (message) {
-        // Добавление сообщений на веб-страницу
-        var datetime = new Date().toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-        var dateyear = new Date().toLocaleDateString();
+        // Добавление сообщений на веб-страницу        
         $('#chatroom').prepend('<span>' + ' (' + dateyear + ') ' + datetime + '</span>' + '<div>' + message + '</div>');
     };
     // Объявление функции, которая вызывает хаб при получении сообщений
@@ -20,7 +21,7 @@
     };
     chat.client.myMessage = function (message) {
         // Добавление сообщений на веб-страницу         
-        $('#chatroom').prepend('<p class="text-danger bg-info"><b>' + htmlEncode(message) + '</p>');
+        $('#chatroom').prepend('<div class="text-danger bg-info"><span ><b>' + htmlEncode(message.forWho) + ' (' + dateyear + ') ' + datetime + '</span><br/>' + '<span>' + htmlEncode(message.mess) + '</span></div>');
     };
     
     //// Функция, вызываемая при подключении нового пользователя
@@ -53,7 +54,7 @@
     $.connection.hub.start().done(function () {
         //$('#messagesReceive')
         //chat.server.connect($('#userId').val() , $('#textUserName').val());
-        
+        chat.server.onConnected($('#userId').val());
         $('#message').keydown(function (e)
         {
             if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey)
@@ -86,8 +87,7 @@
                 }
                 $('#message').val('');
                 $('#cell').text('0');
-            }
-            
+            }            
         }),        
 
         $('#sendmessage').click(function () {
@@ -121,6 +121,7 @@
         });
     });
 });
+
 
 // Кодирование тегов
 function htmlEncode(value) {

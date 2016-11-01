@@ -54,13 +54,14 @@ namespace Chasok4.ChatHubs
 
         public void Send(MyMessage message)
         {
-            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName + ":\n" + message.Msg);
-            Clients.Client(Context.ConnectionId).myMessage("Me:\n" + message.Msg);            
+            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName +" "+ message.CreateDate.ToShortDateString()+ ":" + message.Msg);
+            Clients.Client(Context.ConnectionId).myMessage(new { forWho = "Me:", mess = message.Msg });            
         }
 
         public override Task OnConnected()
         {
-            var id = Context.ConnectionId;
+            //var id = Context.ConnectionId;
+            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages();
             Clients.Client(Context.ConnectionId).onConnected("Hello To you");
             return base.OnConnected();
         }
