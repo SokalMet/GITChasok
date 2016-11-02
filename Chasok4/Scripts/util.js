@@ -6,43 +6,25 @@
     var datetime = new Date().toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
     var dateyear = new Date().toLocaleDateString();
 
-    chat.client.onConnected = function (message) {
-        // Добавление сообщений на веб-страницу        
-        $('#chatroom').prepend('<span>' + ' (' + message.createdate + ') ' + message.creatoremail + '</span>' + '<div>' + message.mess + '</div>');
-    };
+    
     // Объявление функции, которая вызывает хаб при получении сообщений
     chat.client.addMessage = function (message) {
+        var date = new Date(Date.parse(message.createdate)).toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
         // Добавление сообщений на веб-страницу         
-        $('#chatroom').prepend('<span>' + ' (' + message.createdate + ') ' + message.senderemail + '</span>' + '<div>' + message.mess + '</div>');
+        $('#chatroom').prepend('<div class="text-success bg-success"><div style="text-align:right"><b>' + message.senderemail + '</div><div style="color:blue; text-align:right"> (' + date + ') </div><br/>' + message.mess + '</div><hr align="center" width="300" color="Red"/>');
 
         var count = +$('#cell').text();
         $('#cell').text(++count);
     };
     chat.client.myMessage = function (message) {
-        // Добавление сообщений на веб-страницу         
-        $('#chatroom').prepend('<div class="text-danger bg-info"><span ><b>' + htmlEncode(message.forWho) + ' (' + dateyear + ') ' + datetime + '</span><br/>' + '<span>' + htmlEncode(message.mess) + '</span></div>');
+        // Добавление сообщений на веб-страницу   
+        $('#chatroom').prepend('<div class="text-danger bg-info"><span><b>' + htmlEncode(message.forWho) + ' (' + dateyear + ') ' + datetime + '</span><br/>' + htmlEncode(message.mess) + '</div><hr align="center" width="300" color="Red"/>');
     };
-    
-    //// Функция, вызываемая при подключении нового пользователя
-    //chat.client.onConnected = function (id, userName, allUsers) {        
-    //    // установка в скрытых полях имени и id текущего пользователя
-    //    $('#userId').val(id);
-    //    $('#textUserName').val(userName);
-    //    // Добавление всех пользователей
-    //    for (i = 0; i < allUsers.length; i++) {
-    //        AddUser(allUsers[i].ConnectionId, allUsers[i].Name);        }
-    //}
 
-    //// Добавляем нового пользователя
-    //chat.client.onNewUserConnected = function (id, name) {
-    //    AddUser(id, name);
-    //}
-
-    //// Удаляем пользователя
-    //chat.client.onUserDisconnected = function (id, userName) {
-
-    //    $('#' + id).remove();
-    //}
+    chat.client.onConnected = function (message) {
+        // Добавление сообщений на веб-страницу        
+        $('#chatroom').prepend('<div><span>' + message.creatoremail + '<div style="color:blue; text-align:right"> (' + message.createdate + ') </div>' + '</span>' + '<span>' + message.mess + '</span></div><hr align="center" width="300" color="Red"/>');
+    };
 
     //подключение к группе
     $.connection.hub.start(function () {
@@ -59,7 +41,7 @@
             if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey)
             {
                 // Ctrl-Enter pressed
-                var date = new Date;
+                var date = new Date();
                 var message = $("#message").val();
                 if (message.length > 0)
                 {
@@ -70,7 +52,7 @@
                             SelectedUsers: selectedInUsers,
                             SenderId: $('#userId').val(),
                             SenderName: $('#textUserName').val(),
-                            CreateDate: date
+                            CreateDate: datetime
                         });
 
                     // Вызываем у хаба метод Send
@@ -90,7 +72,7 @@
         }),        
 
         $('#sendmessage').click(function () {
-            var date = new Date;
+            var date = new Date();
             var message = $("#message").val();
             if (message.length > 0)
                 {
@@ -101,7 +83,7 @@
                     SelectedUsers: selectedInUsers,
                     SenderId: $('#userId').val(),
                     SenderName: $('#textUserName').val(),
-                    CreateDate: date
+                    CreateDate: datetime
                 });
 
             // Вызываем у хаба метод Send
