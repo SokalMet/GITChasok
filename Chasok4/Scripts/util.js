@@ -8,16 +8,15 @@
 
     chat.client.onConnected = function (message) {
         // Добавление сообщений на веб-страницу        
-        $('#chatroom').prepend('<span>' + ' (' + dateyear + ') ' + datetime + '</span>' + '<div>' + message + '</div>');
+        $('#chatroom').prepend('<span>' + ' (' + message.createdate + ') ' + message.creatoremail + '</span>' + '<div>' + message.mess + '</div>');
     };
     // Объявление функции, которая вызывает хаб при получении сообщений
     chat.client.addMessage = function (message) {
         // Добавление сообщений на веб-страницу         
-        $('#chatroom').prepend('<p><b>' + htmlEncode(message) + '</p>');
-        
+        $('#chatroom').prepend('<span>' + ' (' + message.createdate + ') ' + message.senderemail + '</span>' + '<div>' + message.mess + '</div>');
+
         var count = +$('#cell').text();
         $('#cell').text(++count);
-        chat.server.messageReceived(messageId);
     };
     chat.client.myMessage = function (message) {
         // Добавление сообщений на веб-страницу         

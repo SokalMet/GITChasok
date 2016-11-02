@@ -54,18 +54,23 @@ namespace Chasok4.ChatHubs
 
         public void Send(MyMessage message)
         {
-            Clients.Groups(message.SelectedUsers).addMessage(message.SenderName +" "+ message.CreateDate.ToShortDateString()+ ":" + message.Msg);
+            Clients.Groups(message.SelectedUsers).addMessage(new { senderemail=message.SenderName, createdate=message.CreateDate, mess=message.Msg });
             Clients.Client(Context.ConnectionId).myMessage(new { forWho = "Me:", mess = message.Msg });            
         }
 
         public void OnConnected(string userId)
         {            
             //var id = Context.ConnectionId;
-            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId);
-            IEnumerable<Message> allMessages = uM.Message.GetMessages();
+            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            IEnumerable<Message> allMessages = uM.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
             foreach (var item in allMessages)
             {
-                Clients.Client(Context.ConnectionId).onConnected(item.Body);
+                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate});
+                if (item.ReadDate == null)
+                {
+                    item.ReadDate = DateTime.Now.ToLocalTime();
+                    uM.Save();
+                }
             }           
         }
 
