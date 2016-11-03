@@ -13,5 +13,6 @@ namespace Chasok4.Models
         public string SenderId { get; set; }
         public string SenderName { get; set; }
         public DateTime CreateDate { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

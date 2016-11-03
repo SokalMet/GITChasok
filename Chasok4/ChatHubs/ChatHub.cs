@@ -28,7 +28,7 @@ namespace Chasok4.ChatHubs
             AppUser currentUser = uM.User.GetUserById(message.SenderId);
             message.SelectedUsers.Add(currentUser.Email);
             newMessage.Body = message.Msg;
-            newMessage.CreateDate = message.CreateDate.ToLocalTime();
+            newMessage.CreateDate = message.CreateTime;
             newMessage.CreatorId = message.SenderId;
             uM.Message.AddMessage(newMessage);
 
@@ -54,7 +54,7 @@ namespace Chasok4.ChatHubs
 
         public void Send(MyMessage message)
         {
-            Clients.Groups(message.SelectedUsers).addMessage(new { senderemail=message.SenderName, createdate=message.CreateDate.ToLocalTime(), mess=message.Msg });
+            Clients.Groups(message.SelectedUsers).addMessage(new { senderemail=message.SenderName, createdate=message.CreateTime.ToString(), mess=message.Msg });
             Clients.Client(Context.ConnectionId).myMessage(new { forWho = "Me:", mess = message.Msg });            
         }
 
@@ -65,7 +65,7 @@ namespace Chasok4.ChatHubs
             IEnumerable<Message> allMessages = uM.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
             foreach (var item in allMessages)
             {
-                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate});
+                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate.ToString()});
                 if (item.ReadDate == null)
                 {
                     item.ReadDate = DateTime.Now.ToLocalTime();

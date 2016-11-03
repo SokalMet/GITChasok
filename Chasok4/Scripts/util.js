@@ -9,21 +9,21 @@
     
     // Объявление функции, которая вызывает хаб при получении сообщений
     chat.client.addMessage = function (message) {
-        var date = new Date(Date.parse(message.createdate)).toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+        
         // Добавление сообщений на веб-страницу         
-        $('#chatroom').prepend('<div class="text-success bg-success"><div style="text-align:right"><b>' + message.senderemail + '</div><div style="color:blue; text-align:right"> (' + date + ') </div><br/>' + message.mess + '</div><hr align="center" width="300" color="Red"/>');
+        $('#chatroom').prepend('<div class="text-success bg-success"><div style="text-align:right"><b>' + message.senderemail + '</div><div style="color:blue; text-align:right"> (' + message.createdate + ') </div><br/>' + message.mess + '</div><hr/>');
 
         var count = +$('#cell').text();
         $('#cell').text(++count);
     };
     chat.client.myMessage = function (message) {
         // Добавление сообщений на веб-страницу   
-        $('#chatroom').prepend('<div class="text-danger bg-info"><span><b>' + htmlEncode(message.forWho) + ' (' + dateyear + ') ' + datetime + '</span><br/>' + htmlEncode(message.mess) + '</div><hr align="center" width="300" color="Red"/>');
+        $('#chatroom').prepend('<div class="text-danger bg-info"><span><b>' + htmlEncode(message.forWho) + ' (' + dateyear + ') ' + datetime + '</span><br/>' + htmlEncode(message.mess) + '</div><hr color="black"/>');
     };
 
     chat.client.onConnected = function (message) {
         // Добавление сообщений на веб-страницу        
-        $('#chatroom').prepend('<div><span>' + message.creatoremail + '<div style="color:blue; text-align:right"> (' + message.createdate + ') </div>' + '</span>' + '<span>' + message.mess + '</span></div><hr align="center" width="300" color="Red"/>');
+        $('#chatroom').prepend('<span style="text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + message.createdate + ') </span><br/><span>' + message.mess + '</span><hr/>');
     };
 
     //подключение к группе
@@ -41,7 +41,7 @@
             if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey)
             {
                 // Ctrl-Enter pressed
-                var date = new Date();
+                var date = new Date;
                 var message = $("#message").val();
                 if (message.length > 0)
                 {
@@ -52,7 +52,8 @@
                             SelectedUsers: selectedInUsers,
                             SenderId: $('#userId').val(),
                             SenderName: $('#textUserName').val(),
-                            CreateDate: datetime
+                            CreateDate: dateyear,
+                            CreateTime: datetime
                         });
 
                     // Вызываем у хаба метод Send
@@ -62,7 +63,9 @@
                             Group: $('#textUserName').val(),
                             SelectedUsers: selectedInUsers,
                             SenderId: $('#userId').val(),
-                            SenderName: $('#textUserName').val()
+                            SenderName: $('#textUserName').val(),
+                            CreateDate: dateyear,
+                            CreateTime: datetime
                         }
                     );
                 }
@@ -72,7 +75,7 @@
         }),        
 
         $('#sendmessage').click(function () {
-            var date = new Date();
+            var date = new Date;
             var message = $("#message").val();
             if (message.length > 0)
                 {
@@ -83,7 +86,8 @@
                     SelectedUsers: selectedInUsers,
                     SenderId: $('#userId').val(),
                     SenderName: $('#textUserName').val(),
-                    CreateDate: datetime
+                    CreateDate: dateyear,
+                    CreateTime: datetime
                 });
 
             // Вызываем у хаба метод Send
@@ -93,7 +97,9 @@
                     Group: $('#textUserName').val(),
                     SelectedUsers: selectedInUsers,
                     SenderId: $('#userId').val(),
-                    SenderName: $('#textUserName').val()
+                    SenderName: $('#textUserName').val(),
+                    CreateDate: dateyear,
+                    CreateTime: datetime
                 }
             );
             }
