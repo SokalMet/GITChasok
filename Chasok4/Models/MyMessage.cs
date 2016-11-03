@@ -12,5 +12,7 @@ namespace Chasok4.Models
         public List<string> SelectedUsers { get; set; }
         public string SenderId { get; set; }
         public string SenderName { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

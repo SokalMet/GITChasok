@@ -7,15 +7,13 @@ namespace Chasok4.Models.Entities
 {
     public class UserMessage
     {
-        public int UserMessageId { get; set; }
-        
+        public int Id { get; set; }
+       // public bool ReadStatus { get; set; } = false;
+
         public int MessageId { get; set; }
-        public virtual Message Message { get; set; }
-        
-        public string Id { get; set; }
-        public virtual AppUser User { get; set; }
-
-        public virtual bool ReadStatus { get; set; } = false;
-
-    }
+        public Message Message { get; set; } 
+               
+        public string ReceiverId { get; set; }
+        public AppUser Receiver { get; set; }
+     }
 }

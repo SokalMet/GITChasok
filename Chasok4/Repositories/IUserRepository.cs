@@ -15,6 +15,6 @@ namespace Chasok4.Repositories
         void InsertUser(AppUser user);
         void DeleteUser(string userId);
         void UpdateUser(AppUser user);
-        void Save();
+        
     }
 }

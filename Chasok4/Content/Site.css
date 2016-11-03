@@ -32,8 +32,8 @@ body {
 input,
 select,
 textarea {
-    max-width: 250px;
-    max-height:40px;
+    max-width: 500px;
+    max-height:120px;
 } 
 
 header, footer {

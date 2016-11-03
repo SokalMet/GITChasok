@@ -39,19 +39,6 @@ namespace Chasok4.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class ChangeUserNameViewModel
-    {
-        [Required]
-        [Display(Name="Текущее имя")]
-        public string OldUserName { get; set; }
-
-        [Required]
-        [StringLength(100, ErrorMessage = "Значение {0} должно содержать символов не менее: {2}.", MinimumLength = 3)]
-        [Display(Name = "Новое имя")]
-        public string NewUserName { get; set; }
-
-    }
-
     public class ChangePasswordViewModel
     {
         [Required]
