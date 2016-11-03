@@ -1,79 +1,128 @@
 ﻿$(function () {
 
-    //$('#chatBody').hide();
-    //$('#loginBlock').show();
     // Ссылка на автоматически-сгенерированный прокси хаба
     var chat = $.connection.ChatHub;
-    // Объявление функции, которая хаб вызывает при получении сообщений
-    chat.client.addMessage = function (name, message) {
-        // Добавление сообщений на веб-страницу 
-        $('#chatroom').append('<p><b>' + htmlEncode(name)
-            + '</b>: ' + htmlEncode(message) + '</p>');
+
+    var datetime = new Date().toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    var dateyear = new Date().toLocaleDateString();
+
+    
+    // Объявление функции, которая вызывает хаб при получении сообщений
+    chat.client.addMessage = function (message) {
+        
+        // Добавление сообщений на веб-страницу         
+        $('#chatroom').prepend('<div class="text-success bg-success"><div style="text-align:right"><b>' + message.senderemail + '</div><div style="color:blue; text-align:right"> (' + message.createdate + ') </div><br/>' + message.mess + '</div><hr/>');
+
+        var count = +$('#cell').text();
+        $('#cell').text(++count);
+    };
+    chat.client.myMessage = function (message) {
+        // Добавление сообщений на веб-страницу   
+        $('#chatroom').prepend('<div class="text-danger bg-info"><span><b>' + htmlEncode(message.forWho) + ' (' + dateyear + ') ' + datetime + '</span><br/>' + htmlEncode(message.mess) + '</div><hr color="black"/>');
     };
 
-    // Функция, вызываемая при подключении нового пользователя
-    chat.client.onConnected = function (id, userName, allUsers) {
+    chat.client.onConnected = function (message) {
+        // Добавление сообщений на веб-страницу        
+        $('#chatroom').prepend('<span style="text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + message.createdate + ') </span><br/><span>' + message.mess + '</span><hr/>');
+    };
 
-        $('#loginBlock').hide();
-        $('#chatBody').show();
-        // установка в скрытых полях имени и id текущего пользователя
-        $('#hdId').val(id);
-        $('#username').val(userName);
-        $('#header').html('<h3>Добро пожаловать, ' + userName + '</h3>');
-
-        // Добавление всех пользователей
-        for (i = 0; i < allUsers.length; i++) {
-
-            AddUser(allUsers[i].ConnectionId, allUsers[i].Name);
-        }
-    }
-
-    // Добавляем нового пользователя
-    chat.client.onNewUserConnected = function (id, name) {
-
-        AddUser(id, name);
-    }
-
-    // Удаляем пользователя
-    chat.client.onUserDisconnected = function (id, userName) {
-
-        $('#' + id).remove();
-    }
+    //подключение к группе
+    $.connection.hub.start(function () {
+        chat.server.join($('#textUserName').val());
+    });
 
     // Открываем соединение
     $.connection.hub.start().done(function () {
+        //$('#messagesReceive')
+        //chat.server.connect($('#userId').val() , $('#textUserName').val());
+        chat.server.onConnected($('#userId').val());
+        $('#message').keydown(function (e)
+        {
+            if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey)
+            {
+                // Ctrl-Enter pressed
+                var date = new Date;
+                var message = $("#message").val();
+                if (message.length > 0)
+                {
+                    chat.server.saveToDb(
+                        {
+                            Msg: $('#message').val(),
+                            Group: $('#textUserName').val(),
+                            SelectedUsers: selectedInUsers,
+                            SenderId: $('#userId').val(),
+                            SenderName: $('#textUserName').val(),
+                            CreateDate: dateyear,
+                            CreateTime: datetime
+                        });
+
+                    // Вызываем у хаба метод Send
+                    chat.server.send(
+                        {
+                            Msg: $('#message').val(),                     
+                            Group: $('#textUserName').val(),
+                            SelectedUsers: selectedInUsers,
+                            SenderId: $('#userId').val(),
+                            SenderName: $('#textUserName').val(),
+                            CreateDate: dateyear,
+                            CreateTime: datetime
+                        }
+                    );
+                }
+                $('#message').val('');
+                $('#cell').text('0');
+            }            
+        }),        
 
         $('#sendmessage').click(function () {
+            var date = new Date;
+            var message = $("#message").val();
+            if (message.length > 0)
+                {
+            chat.server.saveToDb(
+                {
+                    Msg: $('#message').val(),
+                    Group: $('#textUserName').val(),
+                    SelectedUsers: selectedInUsers,
+                    SenderId: $('#userId').val(),
+                    SenderName: $('#textUserName').val(),
+                    CreateDate: dateyear,
+                    CreateTime: datetime
+                });
+
             // Вызываем у хаба метод Send
-            chat.server.send($('#txtUserName').val(), $('#message').val());
+            chat.server.send(
+                {
+                    Msg: $('#message').val(),                     
+                    Group: $('#textUserName').val(),
+                    SelectedUsers: selectedInUsers,
+                    SenderId: $('#userId').val(),
+                    SenderName: $('#textUserName').val(),
+                    CreateDate: dateyear,
+                    CreateTime: datetime
+                }
+            );
+            }
             $('#message').val('');
+            $('#cell').text('0');
         });
-
-        //// обработка логина
-        //$("#btnLogin").click(function () {
-
-        //    var name = $("#txtUserName").val();
-        //    if (name.length > 0) {
-        //        chat.server.connect(name);
-        //    }
-        //    else {
-        //        alert("Введите имя");
-        //    }
-        //});
     });
 });
+
+
 // Кодирование тегов
 function htmlEncode(value) {
     var encodedValue = $('<div />').text(value).html();
     return encodedValue;
 }
+
 //Добавление нового пользователя
-function AddUser(id, name) {
+//function AddUser(id, name) {
 
-    var userId = $('#hdId').val();
+//    var userId = $('#hdId').val();
 
-    if (userId != id) {
+//    if (userId != id) {
 
-        $("#chatusers").append('<p id="' + id + '"><b>' + name + '</b></p>');
-    }
-}
+//        $("#chatusers").append('<p id="' + id + '"><b>' + name + '</b></p>');
+//    }
+//}
