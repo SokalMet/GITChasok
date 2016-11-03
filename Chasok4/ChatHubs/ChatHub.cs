@@ -18,7 +18,6 @@ namespace Chasok4.ChatHubs
     [HubName("ChatHub")]
     public class ChatHub : Hub
     {
-        //static List<AppUser> ChatUsers = new List<AppUser>();
         static UnitOfWork uM = new UnitOfWork();
         IEnumerable<AppUser> allUsers = uM.User.GetUsers();
         
@@ -59,8 +58,7 @@ namespace Chasok4.ChatHubs
         }
 
         public void OnConnected(string userId)
-        {            
-            //var id = Context.ConnectionId;
+        {   
             IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
             IEnumerable<Message> allMessages = uM.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
             foreach (var item in allMessages)
@@ -72,40 +70,6 @@ namespace Chasok4.ChatHubs
                     uM.Save();
                 }
             }           
-        }
-
-
-
-        //private static List<string> users = new List<string>();
-        //public void Connect(string userId, string userName)
-        //{
-        //    UserMessage userMessage = new UserMessage();
-        //        userMessage = uM.UserMessage.GetUserMessages().SingleOrDefault(u=>u.ReceiverId==userId);
-
-        //    var id = Context.ConnectionId;
-
-        //    if (!ChatUsers.Any(x => x.Id == id))
-        //    {
-        //        ChatUsers.Add(new AppUser { Id = id, UserName = userName });
-
-        //        // Посылаем сообщение текущему пользователю
-        //        Clients.Caller.onConnected(id, userName, ChatUsers);
-        //    }
-        //}
-
-        //// Отключение пользователя
-        //public override Task OnDisconnected(bool stopCalled)
-        //{
-        //    var item = ChatUsers.FirstOrDefault(x => x.Id == Context.ConnectionId);
-        //    if (item != null)
-        //    {
-        //        ChatUsers.Remove(item);
-        //        var id = Context.ConnectionId;
-        //        Clients.All.onUserDisconnected(id, item.UserName);
-        //    }
-
-        //    return base.OnDisconnected(stopCalled);
-        //}
-
+        }        
     }
 }
