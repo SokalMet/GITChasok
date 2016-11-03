@@ -15,6 +15,7 @@
 
         var count = +$('#cell').text();
         $('#cell').text(++count);
+        chat.server.messageReadDate(datetime, $('#userId').val());
     };
     chat.client.myMessage = function (message) {
         // Добавление сообщений на веб-страницу   
@@ -33,15 +34,12 @@
 
     // Открываем соединение
     $.connection.hub.start().done(function () {
-        //$('#messagesReceive')
-        //chat.server.connect($('#userId').val() , $('#textUserName').val());
         chat.server.onConnected($('#userId').val());
         $('#message').keydown(function (e)
         {
-            if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey)
+            if ((e.keyCode === 10 || e.keyCode === 13) && e.ctrlKey)
             {
                 // Ctrl-Enter pressed
-                var date = new Date;
                 var message = $("#message").val();
                 if (message.length > 0)
                 {
@@ -109,20 +107,8 @@
     });
 });
 
-
 // Кодирование тегов
 function htmlEncode(value) {
     var encodedValue = $('<div />').text(value).html();
     return encodedValue;
 }
-
-//Добавление нового пользователя
-//function AddUser(id, name) {
-
-//    var userId = $('#hdId').val();
-
-//    if (userId != id) {
-
-//        $("#chatusers").append('<p id="' + id + '"><b>' + name + '</b></p>');
-//    }
-//}

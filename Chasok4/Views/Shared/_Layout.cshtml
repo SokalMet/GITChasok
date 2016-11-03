@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Chasok", "Index", "Home")</li>
                 <li>@Html.ActionLink("Chat", "Chat", "Home")</li>
-                <li><a href="#">Income Message<span class="badge" id="cell">0</span></a></li>
+                <li><a href="home/chat">Income Message<span class="badge" id="cell"></span></a></li>
             </ul>
             <ul class="nav navbar-nav" style="padding-left:5%">
                 @Html.Partial("_LoginPartial");
@@ -39,18 +39,10 @@
     </div>
     
 
-    @*<script>
-            function updateTimer() {
-            var cell = document.getElementById('cell');
-            var count = Number(cell.innerHTML);
+    <script>
+        $('cell').hidden();
 
-            cell.innerHTML = count += 1;
-            };
-
-            setInterval(updateTimer, 1000);
-
-
-        </script>*@
+        </script>
 
     
 </body>

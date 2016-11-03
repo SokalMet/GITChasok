@@ -41,10 +41,25 @@ namespace Chasok4.ChatHubs
                         newUserMessage.Message = newMessage;
                         newUserMessage.Receiver = receiverUser;
                         uM.UserMessage.AddUserMessage(newUserMessage);
+                        if (a == message.SenderName)
+                            newUserMessage.ReadDate = message.CreateTime;
                     }
             }
             uM.Save();
-        }        
+        }
+
+        public void MessageReadDate(DateTime readDate, string userId)
+        {
+            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            foreach (var item in allUsersMessages)
+            {
+                if (item.ReadDate == null)
+                {
+                    item.ReadDate = readDate;
+                    uM.Save();
+                }
+            }
+        }
 
         public void Join(string roomName)
         {
@@ -64,12 +79,15 @@ namespace Chasok4.ChatHubs
             foreach (var item in allMessages)
             {
                 Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate.ToString()});
+            }
+            foreach (var item in allUsersMessages)
+            {
                 if (item.ReadDate == null)
                 {
                     item.ReadDate = DateTime.Now.ToLocalTime();
                     uM.Save();
                 }
-            }           
+            }
         }        
     }
 }

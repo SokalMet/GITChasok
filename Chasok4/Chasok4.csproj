@@ -190,6 +190,10 @@
     <Compile Include="Migrations\201610280726146_GoodModelNow.Designer.cs">
       <DependentUpon>201610280726146_GoodModelNow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611031257109_replace read date of message.cs" />
+    <Compile Include="Migrations\201611031257109_replace read date of message.Designer.cs">
+      <DependentUpon>201611031257109_replace read date of message.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Entities\Message.cs" />
     <Compile Include="Models\Entities\AppUser.cs" />
@@ -295,6 +299,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610280726146_GoodModelNow.resx">
       <DependentUpon>201610280726146_GoodModelNow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611031257109_replace read date of message.resx">
+      <DependentUpon>201611031257109_replace read date of message.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
