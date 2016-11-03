@@ -58,6 +58,7 @@ namespace Chasok4.Controllers
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Ваш пароль изменен."
+                : message == ManageMessageId.ChangeNameSuccess ? "Ваше Имя изменено."
                 : message == ManageMessageId.SetPasswordSuccess ? "Пароль задан."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Настроен поставщик двухфакторной проверки подлинности."
                 : message == ManageMessageId.Error ? "Произошла ошибка."
@@ -221,6 +222,30 @@ namespace Chasok4.Controllers
         }
 
         //
+        // POST: /Manage/ChangeUserName
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeUserName(ChangeUserNameViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldUserName, model.NewUserName);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeNameSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        //
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -376,6 +401,7 @@ namespace Chasok4.Controllers
         public enum ManageMessageId
         {
             AddPhoneSuccess,
+            ChangeNameSuccess,
             ChangePasswordSuccess,
             SetTwoFactorSuccess,
             SetPasswordSuccess,

@@ -152,7 +152,7 @@ namespace Chasok4.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = model.Email, Email = model.Email, NickName = model.NickName };
+                var user = new AppUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
