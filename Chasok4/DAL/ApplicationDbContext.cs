@@ -11,10 +11,13 @@ namespace Chasok4.DAL
 {  
         public class ApplicationDbContext : IdentityDbContext<AppUser>
         {
-        public DbSet<IdentityUser> AppUsers { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<UserMessage> UserMessages { get; set; }
+        //public DbSet<ConversationRoom> Rooms { get; set; }
 
         public ApplicationDbContext()
-                : base("ConnectionToChasok")//, throwIfV1Schema: false)
+                : base("ConnectionToChasok", throwIfV1Schema: false)
             {
             }
 
@@ -22,10 +25,8 @@ namespace Chasok4.DAL
         {
             return new ApplicationDbContext();
         }
-
-        //public DbSet<IdentityUser> AppUser { get; set; }
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<UserMessage> MessagesForUsers { get; set; }
+        
+        
 
         
     }   

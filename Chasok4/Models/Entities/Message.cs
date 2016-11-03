@@ -6,19 +6,19 @@ using System.Web;
 namespace Chasok4.Models.Entities
 {
     public class Message
-    {
+    {        
         public Message()
-        {            
-            this.UserMessage = new List<UserMessage>();
+        {
+            userMessages = new HashSet<UserMessage>();
         }
-        public int MessageId { get; set; }
+        public int Id { get; set; }
         public string Body { get; set; }
         public DateTime CreateDate { get; set; }
-        public virtual AppUser CreaterId { get; set; }
+        public DateTime? ReadDate { get; set; }
 
-        public int UserId { get; set; }
-        public virtual AppUser User { get; set; }
-
-        public virtual List<UserMessage> UserMessage { get; set; }
+        public string CreatorId { get; set; }
+        public AppUser Creator { get; set; }
+        
+        public virtual ICollection<UserMessage> userMessages { get; set; }
     }
 }
