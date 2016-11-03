@@ -10,17 +10,16 @@ namespace Chasok4.Controllers
 {
     public class HomeController : Controller
     {
-        UnitOfWork unitOfWork;
+        IUserRepository db = new UserRepository();
         
         public HomeController()
         {
-            unitOfWork = new UnitOfWork();
+            this.db = new UserRepository();          
         }
 
         public ActionResult Index()
         {
-            var users = unitOfWork.User.GetUsers();
-            return View();
+            return View(db.GetUsers());
         }
 
         public ActionResult About()
@@ -33,44 +32,14 @@ namespace Chasok4.Controllers
         [Authorize]
         public ActionResult Chat()
         {
-            var myUser = unitOfWork.User.GetUsers();
-            ViewBag.UpperTitle = "Your Chat page.";
-
-            ViewBag.getAllUsers = new SelectList(GetUsersFriends(), "Value", "Text");
-            ViewBag.userId = unitOfWork.User.GetUserByName(User.Identity.Name).Id;
-            
-            return View(myUser);
+            var Users = db.GetUsers();
+            //IEnumerable<ApplicationUser> allUsers = userRep.GetUsers();
+            ViewBag.Message = "Your Chat page.";
+            //ViewBag.ListOfUsers = allUsers;
+            return View(Users);
         }
 
-
-
-        [HttpPost]
-        public void MessageAction(Message message)
-        {
-            unitOfWork.Message.AddMessage(message);
-        }
-
-
-        #region Custom methods
-
-        [NonAction]
-        public List<SelectListItem> GetUsersFriends()
-        {
-            var sourceItems = new List<SelectListItem>();
-            
-            foreach (var item in unitOfWork.User.GetUsers().Where(x => x.UserName!=User.Identity.Name).OrderBy(x => x.UserName)
-                .Select(x => x.Email).ToList())
-            {
-                sourceItems.Add(new SelectListItem()
-                {
-                    Value = item,
-                    Text = item                    
-                });
-            }
-
-            return sourceItems;
-        }
-
-        #endregion
+        
+        
     }
 }
