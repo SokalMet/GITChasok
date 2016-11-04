@@ -35,6 +35,8 @@
     // Открываем соединение
     $.connection.hub.start().done(function () {
         chat.server.onConnected($('#userId').val());
+
+        //Отправка по нажатии комбинации клавиш
         $('#message').keydown(function (e)
         {
             if ((e.keyCode === 10 || e.keyCode === 13) && e.ctrlKey)
@@ -42,9 +44,10 @@
                 // Ctrl-Enter pressed
                 var message = $("#message").val();
                 if (message.length > 0)
-                {
+                {                    
                     chat.server.saveToDb(
                         {
+                            // Вызываем у хаба метод SaveToDb
                             Msg: $('#message').val(),
                             Group: $('#textUserName').val(),
                             SelectedUsers: selectedInUsers,
@@ -72,12 +75,13 @@
             }            
         }),        
 
-        $('#sendmessage').click(function () {
-            var date = new Date;
+        //Отправка по нажатию кнопки Send
+        $('#sendmessage').click(function () {            
             var message = $("#message").val();
             if (message.length > 0)
-                {
-            chat.server.saveToDb(
+            {
+                // Вызываем у хаба метод SaveToDb
+              chat.server.saveToDb(
                 {
                     Msg: $('#message').val(),
                     Group: $('#textUserName').val(),
@@ -88,8 +92,8 @@
                     CreateTime: datetime
                 });
 
-            // Вызываем у хаба метод Send
-            chat.server.send(
+              // Вызываем у хаба метод Send
+              chat.server.send(
                 {
                     Msg: $('#message').val(),                     
                     Group: $('#textUserName').val(),
@@ -98,8 +102,7 @@
                     SenderName: $('#textUserName').val(),
                     CreateDate: dateyear,
                     CreateTime: datetime
-                }
-            );
+                });
             }
             $('#message').val('');
             $('#cell').text('0');

@@ -20,7 +20,7 @@ namespace Chasok4.ChatHubs
     {
         static UnitOfWork uM = new UnitOfWork();
         IEnumerable<AppUser> allUsers = uM.User.GetUsers();
-        
+
         public void SaveToDb(MyMessage message)
         {
             Message newMessage = new Message();

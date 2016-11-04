@@ -13,18 +13,18 @@
 <input id="textUserName" value="@User.Identity.Name" hidden />
 
 <div class="row">
-    <div class="col-md-4" style="border:double">
+    <div class="col-md-4" >
         <label for="getAllUsers">Select users You want talk to</label>
         @Html.DropDownList("getAllUsers", null, "Users", new { })
     </div>
 </div>    
 
 <div class="row">
-    <div class="col-md-4" style="border:double">
+    <div class="col-md-4">
         <div id="selectedInUsersDiv"></div>
     </div>
 
-    <div class="col-md-6 col-md-offset-1" style="border:double">
+    <div class="col-md-6 col-md-offset-1" style="border:solid; color-rendering:auto">
         <div id="chatBody" onmouseover="cleanFunction()">
             <div>
                 <form action="" onsubmit="return false">
@@ -66,8 +66,8 @@
         function renderSelectedUsers() {
             $("#selectedInUsersDiv").html("");
             for (var i = 0; i < selectedInUsers.length ; i++) {
-                $("#selectedInUsersDiv").append("<div><input readonly type=\"text\" width=\"200px\" id=\"checkedUser\" value=\"" + selectedInUsers[i]
-                    + "\"/><button type=\"button\" class=\"glyphicon glyphicon-trash\" onclick=\"removeSelectedUser('"
+                $("#selectedInUsersDiv").append("<div id=\"checkedUser\">" + selectedInUsers[i]
+                    + "<button type=\"button\" style=\"border:none;background: none;\" class=\"glyphicon glyphicon-remove-sign\" onclick=\"removeSelectedUser('"
                     + selectedInUsers[i].toString() + "')\"></button> </div>  ");
             }
         }

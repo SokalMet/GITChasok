@@ -11,6 +11,7 @@
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
+    
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
@@ -19,7 +20,7 @@
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Chasok", "Index", "Home")</li>
                 <li>@Html.ActionLink("Chat", "Chat", "Home")</li>
-                <li><a href="home/chat">Income Message<span class="badge" id="cell"></span></a></li>
+                <li ><a href="#" id="messageCounter" >Income Message<span class="badge" id="cell"></span></a></li>
             </ul>
             <ul class="nav navbar-nav" style="padding-left:5%">
                 @Html.Partial("_LoginPartial");
@@ -29,8 +30,10 @@
         <div class="col-md-12">
             @RenderBody()
         </div>
+       
+    </div>
 
-
+    <div>
         <footer class="col-md-12">
             <div>
                 <p>&copy; @DateTime.Now.Year – Chasok</p>
@@ -40,9 +43,9 @@
     
 
     <script>
-        $('cell').hidden();
+       
 
-        </script>
+    </script>
 
     
 </body>
