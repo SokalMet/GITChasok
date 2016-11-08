@@ -21,28 +21,28 @@ namespace Chasok4.ChatHubs
         static UnitOfWork uM = new UnitOfWork();
         IEnumerable<AppUser> allUsers = uM.User.GetUsers();
 
-        public void SaveToDb(MyMessage message)
+        public void SaveToDb(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
         {
             Message newMessage = new Message();
-            AppUser currentUser = uM.User.GetUserById(message.SenderId);
-            message.SelectedUsers.Add(currentUser.Email);
-            newMessage.Body = message.Msg;
-            newMessage.CreateDate = message.CreateTime;
-            newMessage.CreatorId = message.SenderId;
+            AppUser currentUser = uM.User.GetUserById(userId);
+            selectedInUsers.Add(currentUser.Email);
+            newMessage.Body = mess;
+            newMessage.CreateDate = date;
+            newMessage.CreatorId = userId;
             uM.Message.AddMessage(newMessage);
 
             foreach (AppUser receiverUser in allUsers)
             {
                 string b = receiverUser.Email;
-                foreach (string a in message.SelectedUsers)
+                foreach (string a in selectedInUsers)
                     if (a == b)
                     {
                         UserMessage newUserMessage = new UserMessage();
                         newUserMessage.Message = newMessage;
                         newUserMessage.Receiver = receiverUser;
                         uM.UserMessage.AddUserMessage(newUserMessage);
-                        if (a == message.SenderName)
-                            newUserMessage.ReadDate = message.CreateTime;
+                        if (a == userName)
+                            newUserMessage.ReadDate = date;
                     }
             }
             uM.Save();
@@ -65,11 +65,12 @@ namespace Chasok4.ChatHubs
         {
             Groups.Add(Context.ConnectionId, roomName);            
         }
+               
 
-        public void Send(MyMessage message)
-        {
-            Clients.Groups(message.SelectedUsers).addMessage(new { senderemail=message.SenderName, createdate=message.CreateTime.ToString(), mess=message.Msg });
-            Clients.Client(Context.ConnectionId).myMessage(new { forWho = "Me:", mess = message.Msg });            
+        public void Send(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
+        {            
+            Clients.Groups(selectedInUsers).addMessage(userName, mess, date.ToLocalTime().ToLongTimeString());
+            Clients.Client(Context.ConnectionId).myMessage(mess, "Me: ", date.ToLocalTime().ToLongTimeString());
         }
 
         public void OnConnected(string userId)
@@ -78,7 +79,7 @@ namespace Chasok4.ChatHubs
             IEnumerable<Message> allMessages = uM.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
             foreach (var item in allMessages)
             {
-                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate.ToString()});
+                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate});
             }
             foreach (var item in allUsersMessages)
             {

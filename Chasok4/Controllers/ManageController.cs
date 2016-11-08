@@ -16,7 +16,7 @@ namespace Chasok4.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private IUserRepository userRepository;
+        //private IUserRepository userRepository;
 
         public ManageController()
         {
