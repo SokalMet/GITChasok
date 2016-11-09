@@ -19,10 +19,11 @@ namespace Chasok4.ChatHubs
     public class ChatHub : Hub
     {
         static UnitOfWork uM = new UnitOfWork();
-        IEnumerable<AppUser> allUsers = uM.User.GetUsers();
+        IEnumerable<AppUser> allUsers;
 
         public void SaveToDb(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
         {
+            allUsers = uM.User.GetUsers();
             Message newMessage = new Message();
             AppUser currentUser = uM.User.GetUserById(userId);
             selectedInUsers.Add(currentUser.Email);
