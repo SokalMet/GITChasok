@@ -66,7 +66,7 @@ $(function () {
     chat.client.addMessage = function (userName, mess, creationTime) {
 
         // Добавление сообщений на веб-страницу         
-        $('#chatroom').prepend('<div class="text-success bg-success"><div style="text-align:right"><b>' + htmlEncode(userName) + '</div><div style="color:blue; text-align:right"> Today at ' + creationTime + '</div><br/>' + htmlEncode(mess) + '</div><hr/>');
+        $('#chatroom').prepend('<div class="text-success bg-success"><div style="text-align:right"><b>' + htmlEncode(userName) + '</div><div style="color:blue; text-align:right"> Today at ' + creationTime + '</div>' + htmlEncode(mess) + '</div><br/>');
 
         var count = +$('#cell').text();
         $('#cell').text(++count);
@@ -75,7 +75,7 @@ $(function () {
 
     chat.client.myMessage = function (mess, forMe, creationTime) {
         // Добавление сообщений на веб-страницу   
-        $('#chatroom').prepend('<div class="text-danger bg-info"><span><b>' + htmlEncode(forMe) + 'Today at ' + creationTime + '</span><br/>' + htmlEncode(mess) + '</div><hr color="black"/>');
+        $('#chatroom').prepend('<div class="text-danger bg-info"><span><b>' + htmlEncode(forMe) + '<span style="color:blue;">Today at ' + creationTime + '</span></span><br/>' + htmlEncode(mess) + '</div><br/>');
     };
 
 
@@ -83,7 +83,7 @@ $(function () {
         // Добавление сообщений на веб-страницу  
         var time = moment(message.createdate).calendar();
 
-        $('#chatroom').prepend('<span style="text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><hr/>');
+        $('#chatroom').prepend('<span style="color:green; text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/><br/>');
     };
 
 });
