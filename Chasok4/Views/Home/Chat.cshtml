@@ -4,40 +4,40 @@
      ViewBag.Title = "Chat";
 }
 
-<div class="text-center text-success">
-    <h2>@ViewBag.UpperTitle</h2>
-</div>
+@*<div class="text-center text-success">
+    @ViewBag.UpperTitle
+</div>*@
 
 <input id="chatusers" hidden />
 <input type="hidden" id="userId" value="@ViewBag.userId" />
 <input id="textUserName" value="@User.Identity.Name" hidden />
 
-<div class="row">
-    <div class="col-md-4" >
+
+    <div class="col-md-4">
         <label for="getAllUsers">Select users You want talk to</label>
         @Html.DropDownList("getAllUsers", null, "Users", new { })
-    </div>
-</div>    
-
-<div class="row">
-    <div class="col-md-4">
         <div id="selectedInUsersDiv"></div>
     </div>
 
-    <div class="col-md-6 col-md-offset-1" style="border:solid; color-rendering:auto">
-        <div id="chatBody" onmouseover="cleanFunction()">
-            <div>
-                <form action="" onsubmit="return false">
-                    <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:100%;"></textarea>
-                    <br>
-                    <button class="btn btn-success" value="Send" id="sendmessage">Send</button>
-                    <br>
-                    <div style="overflow-y:scroll; max-height:50vh; " id="chatroom"> </div>
-                </form>
+
+    <div class="col-md-7">        
+            
+        
+
+        <div style="border:solid; color-rendering:auto">
+            <div id="chatBody" onmouseover="cleanFunction()">
+                <div>
+                    <form action="" onsubmit="return false">
+                        <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:80%;"></textarea>
+                        <button class="btn btn-success btn-sm" value="Send" style="vertical-align:20px; resize:vertical" id="sendmessage">Send</button>
+                        
+                        <div style="overflow-y:scroll; max-height:50vh; " id="chatroom"> </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
 
 
 
