@@ -80,9 +80,9 @@ $(function () {
 
 
     chat.client.onConnected = function (message) {
-        // Добавление сообщений на веб-страницу      
-        var time = moment(message.createdate).format('LLLL').toString();
-        
+        // Добавление сообщений на веб-страницу  
+        var time = moment(message.createdate).calendar();
+
         $('#chatroom').prepend('<span style="text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><hr/>');
     };
 
