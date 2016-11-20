@@ -9,10 +9,8 @@ $(function () {
         console.log('SignalR my error: ' + error)
     });
 
-    var datetime = new Date().toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-    var dateyear = new Date().toLocaleDateString();
-    var date = new Date;
-
+    //var datetime = new Date().toLocaleTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    //var dateyear = new Date().toLocaleDateString();
 
     //подключение к группе
     $.connection.hub.start(function () {
@@ -23,6 +21,7 @@ $(function () {
 
     // Открываем соединение
     $.connection.hub.start().done(function () {
+        
         chat.server.onConnected($('#userId').val());
         //debugger;
 
@@ -30,6 +29,8 @@ $(function () {
             var message = $("#message").val();
 
             if (message.length > 0) {
+                //debugger;
+                var date = new Date;
                 // Вызываем у хаба метод SaveToDb
                 chat.server.saveToDb(message, $('#userId').val(), $('#textUserName').val(), selectedInUsers, date);
                   
@@ -70,6 +71,7 @@ $(function () {
 
         var count = +$('#cell').text();
         $('#cell').text(++count);
+        var date = new Date;
         chat.server.messageReadDate(date, $('#userId').val());
     };
 

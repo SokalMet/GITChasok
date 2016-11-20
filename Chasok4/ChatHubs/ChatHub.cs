@@ -29,13 +29,12 @@ namespace Chasok4.ChatHubs
 
         public void SaveToDb(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
         {
-            DateTime localTime = date.ToLocalTime();
             IEnumerable<AppUser> allUsers = uW.User.GetUsers();
             Message newMessage = new Message();
             AppUser currentUser = uW.User.GetUserById(userId);
             selectedInUsers.Add(currentUser.Email);
             newMessage.Body = mess;
-            newMessage.CreateDate = localTime;
+            newMessage.CreateDate = date.ToLocalTime();
             newMessage.CreatorId = userId;
             uW.Message.AddMessage(newMessage);
 
@@ -50,7 +49,7 @@ namespace Chasok4.ChatHubs
                         newUserMessage.Receiver = receiverUser;
                         uW.UserMessage.AddUserMessage(newUserMessage);
                         if (a == userName)
-                            newUserMessage.ReadDate = localTime;
+                            newUserMessage.ReadDate = date.ToLocalTime();
                     }
             }
             uW.Save();
@@ -63,7 +62,7 @@ namespace Chasok4.ChatHubs
             {
                 if (item.ReadDate == null)
                 {
-                    item.ReadDate = readDate;
+                    item.ReadDate = readDate.ToLocalTime();
                     uW.Save();
                 }
             }
