@@ -11,6 +11,7 @@ using Chasok4.Models;
 using System.Threading.Tasks;
 using Chasok4.DAL;
 using System.Data.Entity;
+using Ninject;
 
 namespace Chasok4.ChatHubs
 {
@@ -18,21 +19,27 @@ namespace Chasok4.ChatHubs
     [HubName("ChatHub")]
     public class ChatHub : Hub
     {
-        static UnitOfWork uM = new UnitOfWork();
-        IEnumerable<AppUser> allUsers;
+        IUnitOfWork uW;// = new UnitOfWork();// = new UnitOfWork();
+        public ChatHub()
+        {
+            IKernel ninjectKernel = new StandardKernel();
+            ninjectKernel.Bind<IUnitOfWork>().To<UnitOfWork>();
+            uW = ninjectKernel.Get<IUnitOfWork>();
+        }
 
         public void SaveToDb(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
         {
-            allUsers = uM.User.GetUsers();
+            DateTime localTime = date.ToLocalTime();
+            IEnumerable<AppUser> allUsers = uW.User.GetUsers();
             Message newMessage = new Message();
-            AppUser currentUser = uM.User.GetUserById(userId);
+            AppUser currentUser = uW.User.GetUserById(userId);
             selectedInUsers.Add(currentUser.Email);
             newMessage.Body = mess;
-            newMessage.CreateDate = date;
+            newMessage.CreateDate = localTime;
             newMessage.CreatorId = userId;
-            uM.Message.AddMessage(newMessage);
+            uW.Message.AddMessage(newMessage);
 
-            foreach (AppUser receiverUser in allUsers)
+            foreach (AppUser receiverUser in uW.User.GetUsers())
             {
                 string b = receiverUser.Email;
                 foreach (string a in selectedInUsers)
@@ -41,23 +48,23 @@ namespace Chasok4.ChatHubs
                         UserMessage newUserMessage = new UserMessage();
                         newUserMessage.Message = newMessage;
                         newUserMessage.Receiver = receiverUser;
-                        uM.UserMessage.AddUserMessage(newUserMessage);
+                        uW.UserMessage.AddUserMessage(newUserMessage);
                         if (a == userName)
-                            newUserMessage.ReadDate = date;
+                            newUserMessage.ReadDate = localTime;
                     }
             }
-            uM.Save();
+            uW.Save();
         }
 
         public void MessageReadDate(DateTime readDate, string userId)
         {
-            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
             foreach (var item in allUsersMessages)
             {
                 if (item.ReadDate == null)
                 {
                     item.ReadDate = readDate;
-                    uM.Save();
+                    uW.Save();
                 }
             }
         }
@@ -75,19 +82,21 @@ namespace Chasok4.ChatHubs
         }
 
         public void OnConnected(string userId)
-        {   
-            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
-            IEnumerable<Message> allMessages = uM.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
+        {
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            IEnumerable<Message> allMessages = uW.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
+            
             foreach (var item in allMessages)
             {
-                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate});
+                AppUser unewUser = uW.User.GetUserById(item.CreatorId);
+                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=unewUser.Email, createdate=item.CreateDate});
             }
             foreach (var item in allUsersMessages)
             {
                 if (item.ReadDate == null)
                 {
                     item.ReadDate = DateTime.Now.ToLocalTime();
-                    uM.Save();
+                    uW.Save();
                 }
             }
         }        

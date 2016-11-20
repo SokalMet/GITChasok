@@ -1,5 +1,6 @@
 ﻿using Chasok4.Models.Entities;
 using Chasok4.Repositories;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,17 @@ namespace Chasok4.Controllers
 {
     public class HomeController : Controller
     {
-        UnitOfWork unitOfWork;
+        IUnitOfWork uW;
         
-        public HomeController()
+        public HomeController(IUnitOfWork u)
         {
-            unitOfWork = new UnitOfWork();
+            uW=u;
         }
 
         public ActionResult Index()
         {
-            var users = unitOfWork.User.GetUsers();
-            return View();
+            
+            return View(uW.User);
         }
 
         public ActionResult About()
@@ -33,11 +34,11 @@ namespace Chasok4.Controllers
         [Authorize]
         public ActionResult Chat()
         {
-            var myUser = unitOfWork.User.GetUsers();
+            var myUser = uW.User.GetUsers();
             ViewBag.UpperTitle = "Your Chat page.";
 
             ViewBag.getAllUsers = new SelectList(GetUsersFriends(), "Value", "Text");
-            ViewBag.userId = unitOfWork.User.GetUserByName(User.Identity.Name).Id;
+            ViewBag.userId = uW.User.GetUserByName(User.Identity.Name).Id;
             
             return View(myUser);
         }
@@ -47,7 +48,7 @@ namespace Chasok4.Controllers
         [HttpPost]
         public void MessageAction(Message message)
         {
-            unitOfWork.Message.AddMessage(message);
+            uW.Message.AddMessage(message);
         }
 
 
@@ -58,7 +59,7 @@ namespace Chasok4.Controllers
         {
             var sourceItems = new List<SelectListItem>();
             
-            foreach (var item in unitOfWork.User.GetUsers().Where(x => x.UserName!=User.Identity.Name).OrderBy(x => x.UserName)
+            foreach (var item in uW.User.GetUsers().Where(x => x.UserName!=User.Identity.Name).OrderBy(x => x.UserName)
                 .Select(x => x.Email).ToList())
             {
                 sourceItems.Add(new SelectListItem()

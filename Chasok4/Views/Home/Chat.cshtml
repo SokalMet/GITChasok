@@ -17,6 +17,11 @@
         @Html.DropDownList("getAllUsers", null, "Users", new { })
         <div id="selectedInUsersDiv"></div>
     </div>
+<script>
+    function cleanFunction() {
+        $("#cell").text('0');
+    }
+</script>
     <div class="col-md-7">   
         <div style="border:solid; color-rendering:auto">
             <div id="chatBody" onmouseover="cleanFunction()">
@@ -39,13 +44,6 @@
     <script src="~/signalr/hubs"></script>
     <script src="~/Scripts/util.js"></script>
     <script>
-
-        function cleanFunction() {
-            $("#cell").text('0');
-
-            //document.getElementById("cell").innerHTML = 0;
-        }
-
         var selectedInUsers = [];
         $("#getAllUsers").change(function () {
             selectedInUsers.push($("#getAllUsers").val());

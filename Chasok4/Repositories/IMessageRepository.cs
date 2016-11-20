@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chasok4.Repositories
 {
-    interface IMessageRepository
+    public interface IMessageRepository
     {
         IEnumerable<Message> GetMessages();
         Message GetMessageById(int messageId);
