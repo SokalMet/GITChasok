@@ -82,13 +82,42 @@ namespace Chasok4.ChatHubs
 
         public void OnConnected(string userId)
         {
+            DateTime dateTimeNow = DateTime.Now;
             IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
             IEnumerable<Message> allMessages = uW.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
             
             foreach (var item in allMessages)
+            {                
+                AppUser unewUser = uW.User.GetUserById(item.CreatorId);
+                    if (item.CreateDate.DayOfYear>=(dateTimeNow.DayOfYear-1))
+                    Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=unewUser.Email, createdate=item.CreateDate});
+            }
+            foreach (var item in allUsersMessages)
+            {
+                if (item.ReadDate == null)
+                {
+                    item.ReadDate = DateTime.Now.ToLocalTime();
+                    uW.Save();
+                }           
+            }
+        }
+
+        public void OnConnectedAllHistory(string userId)
+        {
+            DateTime dateTimeNow = DateTime.Now;
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            IEnumerable<Message> allMessages = uW.Message.GetMessages().Where(x => allUsersMessages.Select(y => y.MessageId).Contains(x.Id)).ToList();
+
+            foreach (var item in allMessages)
             {
                 AppUser unewUser = uW.User.GetUserById(item.CreatorId);
-                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=unewUser.Email, createdate=item.CreateDate});
+                if (item.CreateDate.DayOfYear<(dateTimeNow.DayOfYear - 1))
+                    Clients.Client(Context.ConnectionId).onConnectedAllHistory(new
+                    {
+                        mess = item.Body,
+                        creatoremail = unewUser.Email,
+                        createdate = item.CreateDate
+                    });
             }
             foreach (var item in allUsersMessages)
             {
@@ -98,6 +127,6 @@ namespace Chasok4.ChatHubs
                     uW.Save();
                 }
             }
-        }        
+        }
     }
 }

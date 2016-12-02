@@ -27,10 +27,14 @@
             <div id="chatBody" onmouseover="cleanFunction()">
                 <div>
                     <form action="" onsubmit="return false">
-                        <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:80%;"></textarea>
-                        <button class="btn btn-success btn-sm" value="Send" style="vertical-align:20px; resize:vertical" id="sendmessage">Send</button>
-                        
-                        <div style="overflow-y:scroll; max-height:50vh; " id="chatroom"> </div>
+                        <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:77%; min-width:77%;"></textarea>
+
+                            <button class="btn btn-success btn-lg" value="Send" style="vertical-align:2vh;" id="sendmessage">Send</button>
+                        <div style="overflow-y:scroll; max-height:50vh; " id="chatroom"></div>
+
+                            <button class="btn btn-default btn-sm" value="ShowHistory" style="vertical-align:10px;" id="showHistory">Show history</button>
+                        <div style="overflow-y:scroll; max-height:30vh;  display:none" id="historyRoom"></div>
+
                     </form>
                 </div>
             </div>
@@ -62,7 +66,7 @@
                     + "<button type=\"button\" style=\"border:none;background: none;\" class=\"glyphicon glyphicon-remove-sign\" onclick=\"removeSelectedUser('"
                     + selectedInUsers[i].toString() + "')\"></button> </div>  ");
             }
-        }
+        }        
 
         function removeSelectedUser(e) {
             for (var i = 0; i < selectedInUsers.length; i++) {

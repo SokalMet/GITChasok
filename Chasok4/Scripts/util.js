@@ -22,6 +22,7 @@ $(function () {
     // Открываем соединение
     $.connection.hub.start().done(function () {
         
+        chat.server.onConnectedAllHistory($('#userId').val());
         chat.server.onConnected($('#userId').val());
         //debugger;
 
@@ -38,6 +39,8 @@ $(function () {
                 chat.server.send(message, $('#userId').val(), $('#textUserName').val(), selectedInUsers, date);                 
             }
         };
+
+                
 
         //Отправка по нажатии комбинации клавиш
         $('#message').keydown(function (e)
@@ -60,6 +63,21 @@ $(function () {
             $('#message').focus();
             $('#cell').text('0');
         });
+
+        $('#showHistory').click(function () {
+            if (localStorage.getItem("getHistoryStyle") != undefined) {
+                localStorage.setItem("getHistoryStyle", "true");
+                $('#historyRoom').show();
+                $('#showHistory').removeClass("btn btn-default btn-sm");
+                $('#showHistory').addClass("btn btn-success btn-sm");
+
+            }
+            else {
+                localStorage.setItem("getHistoryStyle", "false");
+                $('#historyRoom').hide();
+            }
+
+        });        
     });
 
 
@@ -87,8 +105,15 @@ $(function () {
 
         $('#chatroom').prepend('<span style="color:green; text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/><br/>');
     };
+    
+
+    chat.client.onConnectedAllHistory = function (message) {
+        var time = moment(message.createdate).calendar();
+        $('#historyRoom').prepend('<div><span style="color:red; text-align:left;">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/></div><br/>');
+    };
 
 });
+
 
 // Кодирование тегов
 function htmlEncode(value) {
