@@ -17,6 +17,7 @@ $(function () {
         chat.server.join($('#textUserName').val());
     });
     chat.server.logging = true;
+    
 
 
     // Открываем соединение
@@ -66,11 +67,21 @@ $(function () {
 
         $('#showHistory').click(function () {
             if (localStorage.getItem("getHistoryStyle") != undefined) {
-                localStorage.setItem("getHistoryStyle", "true");
-                $('#historyRoom').show();
-                $('#showHistory').removeClass("btn btn-default btn-sm");
-                $('#showHistory').addClass("btn btn-success btn-sm");
-
+                if (localStorage.getItem("getHistoryStyle") == "true" && $('#showHistory').text() == "Hide") {
+                    localStorage.setItem("getHistoryStyle", "false");
+                    $('#historyRoom').hide();
+                    $('#showHistory').text("Show history");
+                    $('#showHistory').removeClass("btn btn-success btn-sm");
+                    $('#showHistory').addClass("btn btn-default btn-sm");
+                } else
+                {
+                    localStorage.setItem("getHistoryStyle", "true");
+                    $('#historyRoom').show();
+                    $('#showHistory').text("Hide");
+                    $('#showHistory').removeClass("btn btn-default btn-sm");
+                    $('#showHistory').addClass("btn btn-success btn-sm");                   
+                }
+                
             }
             else {
                 localStorage.setItem("getHistoryStyle", "false");
