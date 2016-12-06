@@ -38,7 +38,7 @@ namespace Chasok4.ChatHubs
             newMessage.CreatorId = userId;
             uW.Message.AddMessage(newMessage);
 
-            foreach (AppUser receiverUser in uW.User.GetUsers())
+            foreach (AppUser receiverUser in allUsers)
             {
                 string b = receiverUser.Email;
                 foreach (string a in selectedInUsers)
@@ -57,7 +57,7 @@ namespace Chasok4.ChatHubs
 
         public void MessageReadDate(DateTime readDate, string userId)
         {
-            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
             foreach (var item in allUsersMessages)
             {
                 if (item.ReadDate == null)
@@ -84,7 +84,7 @@ namespace Chasok4.ChatHubs
         public void OnConnected(string userId)
         {
             DateTime dateTimeNow = DateTime.Now;
-            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
             IEnumerable<Message> allMessages = uW.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
             
             foreach (var item in allMessages)
@@ -106,7 +106,7 @@ namespace Chasok4.ChatHubs
         public void OnConnectedAllHistory(string userId)
         {
             DateTime dateTimeNow = DateTime.Now;
-            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
             IEnumerable<Message> allMessages = uW.Message.GetMessages().Where(x => allUsersMessages.Select(y => y.MessageId).Contains(x.Id)).ToList();
 
             foreach (var item in allMessages)

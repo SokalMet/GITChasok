@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Chasok4.Models.Entities;
 using Chasok4.DAL;
+using Chasok4.Projections;
 
 namespace Chasok4.Repositories
 {
@@ -34,6 +35,11 @@ namespace Chasok4.Repositories
         public IEnumerable<UserMessage> GetUserMessages()
         {
             return db.UserMessages.ToList();
+        }
+
+        public IEnumerable<UserMessage> GetUserMessages(string receiverId)
+        {
+            return db.UserMessages.Where(y=>y.ReceiverId == receiverId).ToList();
         }
 
         public void AddUserMessage(UserMessage userMessage)
