@@ -26,7 +26,7 @@ namespace Chasok4.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Application description page.";
 
             return View();
         }
@@ -42,15 +42,6 @@ namespace Chasok4.Controllers
             
             return View(myUser);
         }
-
-
-
-        [HttpPost]
-        public void MessageAction(Message message)
-        {
-            uW.Message.AddMessage(message);
-        }
-
 
         #region Custom methods
 

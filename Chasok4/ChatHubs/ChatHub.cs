@@ -75,7 +75,8 @@ namespace Chasok4.ChatHubs
                
 
         public void Send(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
-        {            
+        {
+            Clients.AllExcept(userId).messageToAll(userName, mess, date.ToLocalTime().ToLongTimeString());         
             Clients.Groups(selectedInUsers).addMessage(userName, mess, date.ToLocalTime().ToLongTimeString());
             Clients.Client(Context.ConnectionId).myMessage(mess, "Me: ", date.ToLocalTime().ToLongTimeString());
         }
@@ -92,7 +93,7 @@ namespace Chasok4.ChatHubs
                     if (item.CreateDate.DayOfYear>=(dateTimeNow.DayOfYear-1))
                     Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=unewUser.Email, createdate=item.CreateDate});
             }
-            foreach (var item in allUsersMessages)
+            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear>= (dateTimeNow.DayOfYear - 1)))
             {
                 if (item.ReadDate == null)
                 {
@@ -119,7 +120,7 @@ namespace Chasok4.ChatHubs
                         createdate = item.CreateDate
                     });
             }
-            foreach (var item in allUsersMessages)
+            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear<(dateTimeNow.DayOfYear - 1)))
             {
                 if (item.ReadDate == null)
                 {
