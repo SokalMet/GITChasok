@@ -24,17 +24,16 @@
 </script>
     <div class="col-md-7">   
         <div style="border:solid; color-rendering:auto">
-            <div id="chatBody" onmouseover="cleanFunction()">
+            <div id="chatBody" style="min-height:50vh;" onmouseover="cleanFunction()">
                 <div>
                     <form action="" onsubmit="return false">
-                        <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:77%; min-width:77%;"></textarea>
-
-                            <button class="btn btn-success btn-lg" value="Send" style="vertical-align:2vh;" id="sendmessage">Send</button>
-                        <div style="overflow-y:scroll; max-height:50vh; " id="chatroom"></div>
-
+                        <div style="overflow-y:scroll; max-height:50vh; min-height:50px; min-height:40px" id="chatroom" >
+                            <span style="overflow-y:scroll; display:none" id="historyRoom"></span>    
                             <button class="btn btn-default btn-sm" value="ShowHistory" style="vertical-align:10px;" id="showHistory">Show history</button>
-                        <div style="overflow-y:scroll; max-height:30vh;  display:none" id="historyRoom"></div>
-
+                            <br />                           
+                        </div>
+                        <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:77%; min-width:77%;"></textarea>
+                        <button class="btn btn-success btn-lg" value="Send" style="vertical-align:2vh;" id="sendmessage">Send</button>
                     </form>
                 </div>
             </div>

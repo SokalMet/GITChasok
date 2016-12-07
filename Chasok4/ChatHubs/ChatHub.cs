@@ -85,13 +85,14 @@ namespace Chasok4.ChatHubs
         {
             DateTime dateTimeNow = DateTime.Now;
             IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
-            IEnumerable<Message> allMessages = uW.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
-            
+            IEnumerable<Message> allMessages = uW.Message.GetMessages(allUsersMessages);
+
             foreach (var item in allMessages)
             {                
                 AppUser unewUser = uW.User.GetUserById(item.CreatorId);
                     if (item.CreateDate.DayOfYear>=(dateTimeNow.DayOfYear-1))
-                    Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=unewUser.Email, createdate=item.CreateDate});
+                    Clients.Client(Context.ConnectionId).onConnected( new {
+                        mess =item.Body, creatoremail=unewUser.Email, createdate=item.CreateDate});
             }
             foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear>= (dateTimeNow.DayOfYear - 1)))
             {
@@ -107,7 +108,7 @@ namespace Chasok4.ChatHubs
         {
             DateTime dateTimeNow = DateTime.Now;
             IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
-            IEnumerable<Message> allMessages = uW.Message.GetMessages().Where(x => allUsersMessages.Select(y => y.MessageId).Contains(x.Id)).ToList();
+            IEnumerable<Message> allMessages = uW.Message.GetMessages(allUsersMessages);
 
             foreach (var item in allMessages)
             {

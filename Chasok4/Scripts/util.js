@@ -24,8 +24,7 @@ $(function () {
     $.connection.hub.start().done(function () {
         
         chat.server.onConnectedAllHistory($('#userId').val());
-        chat.server.onConnected($('#userId').val());
-        //debugger;
+        chat.server.onConnected($('#userId').val());        
 
         function myfunction() {
             var message = $("#message").val();
@@ -80,24 +79,23 @@ $(function () {
                     $('#showHistory').text("Hide");
                     $('#showHistory').removeClass("btn btn-default btn-sm");
                     $('#showHistory').addClass("btn btn-success btn-sm");                   
-                }
-                
+                }                
             }
             else {
                 localStorage.setItem("getHistoryStyle", "false");
                 $('#historyRoom').hide();
             }
+        });
 
-        });        
     });
 
 
     // Объявление функции, которая вызывает хаб при получении сообщений
     chat.client.addMessage = function (userName, mess, creationTime) {
-
+        
         // Добавление сообщений на веб-страницу         
-        $('#chatroom').prepend('<div class="text-success bg-success"><div style="text-align:right"><b>' + htmlEncode(userName) + '</div><div style="color:blue; text-align:right"> Today at ' + creationTime + '</div>' + htmlEncode(mess) + '</div><br/>');
-
+        $('#chatroom').append('<div class="text-success bg-success"><div style="text-align:right"><b>' + htmlEncode(userName) + '</div><div style="color:blue; text-align:right"> Today at ' + creationTime + '</div>' + htmlEncode(mess) + '</div><br/>');
+        scrollDown('chatroom');
         var count = +$('#cell').text();
         $('#cell').text(++count);
         var date = new Date;
@@ -106,21 +104,23 @@ $(function () {
 
     chat.client.myMessage = function (mess, forMe, creationTime) {
         // Добавление сообщений на веб-страницу   
-        $('#chatroom').prepend('<div class="text-danger bg-info"><span><b>' + htmlEncode(forMe) + '<span style="color:blue;">Today at ' + creationTime + '</span></span><br/>' + htmlEncode(mess) + '</div><br/>');
+        $('#chatroom').append('<div class="text-danger bg-info"><span><b>' + htmlEncode(forMe) + '<span style="color:blue;">Today at ' + creationTime + '</span></span><br/>' + htmlEncode(mess) + '</div><br/>');
+        scrollDown('chatroom');
     };
 
 
     chat.client.onConnected = function (message) {
         // Добавление сообщений на веб-страницу  
-        var time = moment(message.createdate).calendar();
-
-        $('#chatroom').prepend('<span style="color:green; text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/><br/>');
+        var time = moment(message.createdate).calendar();        
+        $('#chatroom').append('<span style="color:green; text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/><br/>');
+        scrollDown('chatroom');
     };
     
 
     chat.client.onConnectedAllHistory = function (message) {
         var time = moment(message.createdate).calendar();
-        $('#historyRoom').prepend('<div><span style="color:red; text-align:left;">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/></div><br/>');
+        $('#historyRoom').append('<div><span style="color:red; text-align:left;">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/></div><br/>');
+        scrollDown('historyRoom');
     };
 
 });
@@ -130,4 +130,9 @@ $(function () {
 function htmlEncode(value) {
     var encodedValue = $('<div />').text(value).html();
     return encodedValue;
+}
+
+function scrollDown(selector){
+    var objDiv = document.getElementById(selector);
+    objDiv.scrollTop = objDiv.scrollHeight;
 }
