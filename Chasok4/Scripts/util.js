@@ -23,6 +23,8 @@ $(function () {
     // Открываем соединение
     $.connection.hub.start().done(function () {
         
+        location.hash = "";
+
         chat.server.onConnectedAllHistory($('#userId').val());
         chat.server.onConnected($('#userId').val());        
 
@@ -64,7 +66,7 @@ $(function () {
             $('#cell').text('0');
         });
 
-        $('#showHistory').click(function () {
+        $('#showHistory').click(function () {            
             if (localStorage.getItem("getHistoryStyle") != undefined) {
                 if (localStorage.getItem("getHistoryStyle") == "true" && $('#showHistory').text() == "Hide") {
                     localStorage.setItem("getHistoryStyle", "false");
@@ -72,13 +74,18 @@ $(function () {
                     $('#showHistory').text("Show history");
                     $('#showHistory').removeClass("btn btn-success btn-sm");
                     $('#showHistory').addClass("btn btn-default btn-sm");
+
+                    location.hash = "";
                 } else
                 {
                     localStorage.setItem("getHistoryStyle", "true");
                     $('#historyRoom').show();
                     $('#showHistory').text("Hide");
                     $('#showHistory').removeClass("btn btn-default btn-sm");
-                    $('#showHistory').addClass("btn btn-success btn-sm");                   
+                    $('#showHistory').addClass("btn btn-success btn-sm");
+                    
+                    location.hash = "showHistory";
+                    
                 }                
             }
             else {
@@ -118,9 +125,10 @@ $(function () {
     
 
     chat.client.onConnectedAllHistory = function (message) {
+        
         var time = moment(message.createdate).calendar();
         $('#historyRoom').append('<div><span style="color:red; text-align:left;">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/></div><br/>');
-        scrollDown('historyRoom');
+        
     };
 
 });

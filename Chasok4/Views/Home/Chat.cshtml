@@ -26,27 +26,30 @@
         <div style="border:solid; color-rendering:auto">
             <div id="chatBody" style="min-height:50vh;" onmouseover="cleanFunction()">
                 <div>
-                    <form action="" onsubmit="return false">
-                        <div style="overflow-y:scroll; max-height:50vh; min-height:50px; min-height:40px" id="chatroom" >
-                            <span style="overflow-y:scroll; display:none" id="historyRoom"></span>    
+                    
+                    <div style="overflow-y:scroll; max-height:50vh; min-height:50px; min-height:40px" id="chatroom">
+                        <span style="overflow-y:scroll; display:none" id="historyRoom"></span>
+                        <span id="lookatme">Look at me</span>
+
+                        <form action="" onsubmit="return false">
                             <button class="btn btn-default btn-sm" value="ShowHistory" style="vertical-align:10px;" id="showHistory">Show history</button>
-                            <br />                           
-                        </div>
-                        <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:77%; min-width:77%;"></textarea>
-                        <button class="btn btn-success btn-lg" value="Send" style="vertical-align:2vh;" id="sendmessage">Send</button>
-                    </form>
+                            <br />
+
+                        </form>
+
+                    </div>
                 </div>
             </div>
-        </div>
+            <hr style="color:dimgrey; margin-top:5px; border:solid" />
+                <textarea rows="4" placeholder="Enter some message" title="Enter some message" id="message" style="max-width:77%; min-width:77%;"></textarea>
+                <button class="btn btn-success btn-lg" value="Send" style="vertical-align:2vh;" id="sendmessage">Send</button>    
+         </div>
     </div>
-
-
-
 
     <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script src="~/Scripts/util.js"></script>
-    <script>
+    <script>        
         var selectedInUsers = [];
         $("#getAllUsers").change(function () {
             selectedInUsers.push($("#getAllUsers").val());
