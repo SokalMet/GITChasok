@@ -6,12 +6,9 @@ using System.Web;
 
 namespace Chasok4.Projections
 {
-    public class Projections
+    public class ProjectionUsers
     {
-        IUnitOfWork uW;
-        public Projections()
-        {
-            
-        }
+       public string UserId { get; set; }
+       public string UserEmail { get; set; }
     }
 }

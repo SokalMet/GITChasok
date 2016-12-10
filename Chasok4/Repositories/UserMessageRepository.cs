@@ -37,7 +37,7 @@ namespace Chasok4.Repositories
             return db.UserMessages.ToList();
         }
 
-        public IEnumerable<UserMessage> GetUserMessages(string receiverId)
+        public List<UserMessage> GetUserMessages(string receiverId)
         {
             return db.UserMessages.Where(y=>y.ReceiverId == receiverId).ToList();
         }

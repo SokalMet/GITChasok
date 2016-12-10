@@ -222,9 +222,7 @@
     <Compile Include="Models\Entities\UserMessage.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Projections\MessageProjection.cs" />
     <Compile Include="Projections\Projections.cs" />
-    <Compile Include="Projections\UserMessageProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IMessageRepository.cs" />
     <Compile Include="Repositories\IUnitOfWork.cs" />

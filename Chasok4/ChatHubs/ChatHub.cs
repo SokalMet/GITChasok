@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Chasok4.DAL;
 using System.Data.Entity;
 using Ninject;
+using Chasok4.Projections;
 
 namespace Chasok4.ChatHubs
 {
@@ -86,13 +87,16 @@ namespace Chasok4.ChatHubs
             DateTime dateTimeNow = DateTime.Now;
             IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
             IEnumerable<Message> allMessages = uW.Message.GetMessages(allUsersMessages);
+            List<ProjectionUsers> allUsers = uW.User.UsersList();
+            //IEnumerable<AppUser> allUsers = uW.User.GetUsers().Distinct();
 
             foreach (var item in allMessages)
-            {                
-                AppUser unewUser = uW.User.GetUserById(item.CreatorId);
+            {
+                //AppUser unewUser = uW.User.GetUserById(item.CreatorId);
+                string email = allUsers.Where(x=>x.UserId == item.CreatorId).Select(y=>y.UserEmail).FirstOrDefault();
                     if (item.CreateDate.DayOfYear>=(dateTimeNow.DayOfYear-1))
                     Clients.Client(Context.ConnectionId).onConnected( new {
-                        mess =item.Body, creatoremail=unewUser.Email, createdate=item.CreateDate});
+                        mess =item.Body, creatoremail= email, createdate=item.CreateDate});
             }
             foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear>= (dateTimeNow.DayOfYear - 1)))
             {
@@ -109,15 +113,16 @@ namespace Chasok4.ChatHubs
             DateTime dateTimeNow = DateTime.Now;
             IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
             IEnumerable<Message> allMessages = uW.Message.GetMessages(allUsersMessages);
+            IEnumerable<AppUser> allUsers = uW.User.GetUsers().Distinct();
 
             foreach (var item in allMessages)
             {
-                AppUser unewUser = uW.User.GetUserById(item.CreatorId);
+                string email = allUsers.Where(x => x.Id == item.CreatorId).Select(y => y.Email).FirstOrDefault();
                 if (item.CreateDate.DayOfYear<(dateTimeNow.DayOfYear - 1))
                     Clients.Client(Context.ConnectionId).onConnectedAllHistory(new
                     {
                         mess = item.Body,
-                        creatoremail = unewUser.Email,
+                        creatoremail = email,
                         createdate = item.CreateDate
                     });
             }

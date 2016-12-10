@@ -6,6 +6,7 @@ using Chasok4.Models.Entities;
 using Chasok4.Models;
 using System.Xml.Linq;
 using Chasok4.DAL;
+using Chasok4.Projections;
 
 namespace Chasok4.Repositories
 {
@@ -38,6 +39,15 @@ namespace Chasok4.Repositories
         public AppUser GetUserByName(string name)
         {
             return db.Users.Where(x=>x.UserName == name).FirstOrDefault();
+        }
+
+        public List<ProjectionUsers> UsersList()
+        {
+            return db.Users.Select(x=> new ProjectionUsers
+            {
+                UserId = x.Id,
+                UserEmail = x.Email
+            }).ToList();
         }
 
         public IEnumerable<AppUser> GetUsers()

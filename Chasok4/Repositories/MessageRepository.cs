@@ -37,8 +37,9 @@ namespace Chasok4.Repositories
         }
 
         public IEnumerable<Message> GetMessages(IEnumerable<UserMessage> usersMessages)
-        {            
-            return db.Messages.ToList().Where(x => (usersMessages.Select(y=>y.MessageId).Contains(x.Id))).ToList();
+        {      
+            List<Message> MessList = db.Messages.ToList();     
+            return MessList.Where(x => (usersMessages.Select(y=>y.MessageId).Contains(x.Id)));
         }
 
         public void AddMessage(Message message)
