@@ -118,7 +118,7 @@ $(function () {
 
     chat.client.onConnected = function (message) {
         // Добавление сообщений на веб-страницу  
-        var time = moment(message.createdate).calendar();        
+        var time = moment(message.createdate).calendar();
         $('#chatroom').append('<span style="color:green; text-align:left">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/><br/>');
         scrollDown('chatroom');
     };
@@ -126,7 +126,11 @@ $(function () {
 
     chat.client.onConnectedAllHistory = function (message) {
         
-        var time = moment(message.createdate).calendar();
+        var time = moment(message.createdate).calendar(null, {
+            lastDay: '[Yesterday] mm:ss',
+            lastWeek: '[Last] dddd',
+            sameElse: 'DD/MM/YYYY'
+        });
         $('#historyRoom').append('<div><span style="color:red; text-align:left;">' + message.creatoremail + '</span>' + '<span style="color:blue; text-align:right"> (' + time + ') </span><br/><span>' + message.mess + '</span><br/></div><br/>');
         
     };
