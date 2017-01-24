@@ -11,6 +11,8 @@ using Chasok4.Models;
 using System.Threading.Tasks;
 using Chasok4.DAL;
 using System.Data.Entity;
+using Ninject;
+using Chasok4.Projections;
 
 namespace Chasok4.ChatHubs
 {
@@ -18,58 +20,120 @@ namespace Chasok4.ChatHubs
     [HubName("ChatHub")]
     public class ChatHub : Hub
     {
-        static UnitOfWork uM = new UnitOfWork();
-        IEnumerable<AppUser> allUsers = uM.User.GetUsers();
-        
-        public void SaveToDb(MyMessage message)
+        IUnitOfWork uW;// = new UnitOfWork();// = new UnitOfWork();
+        public ChatHub()
         {
+            IKernel ninjectKernel = new StandardKernel();
+            ninjectKernel.Bind<IUnitOfWork>().To<UnitOfWork>();
+            uW = ninjectKernel.Get<IUnitOfWork>();
+        }
+
+        public void SaveToDb(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
+        {
+            IEnumerable<AppUser> allUsers = uW.User.GetUsers();
             Message newMessage = new Message();
-            AppUser currentUser = uM.User.GetUserById(message.SenderId);
-            message.SelectedUsers.Add(currentUser.Email);
-            newMessage.Body = message.Msg;
-            newMessage.CreateDate = message.CreateTime;
-            newMessage.CreatorId = message.SenderId;
-            uM.Message.AddMessage(newMessage);
+            AppUser currentUser = uW.User.GetUserById(userId);
+            selectedInUsers.Add(currentUser.Email);
+            newMessage.Body = mess;
+            newMessage.CreateDate = date.ToLocalTime();
+            newMessage.CreatorId = userId;
+            uW.Message.AddMessage(newMessage);
 
             foreach (AppUser receiverUser in allUsers)
             {
                 string b = receiverUser.Email;
-                foreach (string a in message.SelectedUsers)
+                foreach (string a in selectedInUsers)
                     if (a == b)
                     {
                         UserMessage newUserMessage = new UserMessage();
                         newUserMessage.Message = newMessage;
                         newUserMessage.Receiver = receiverUser;
-                        uM.UserMessage.AddUserMessage(newUserMessage);
+                        uW.UserMessage.AddUserMessage(newUserMessage);
+                        if (a == userName)
+                            newUserMessage.ReadDate = date.ToLocalTime();
                     }
             }
-            uM.Save();
-        }        
+            uW.Save();
+        }
+
+        public void MessageReadDate(DateTime readDate, string userId)
+        {
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
+            foreach (var item in allUsersMessages)
+            {
+                if (item.ReadDate == null)
+                {
+                    item.ReadDate = readDate.ToLocalTime();
+                    uW.Save();
+                }
+            }
+        }
 
         public void Join(string roomName)
         {
             Groups.Add(Context.ConnectionId, roomName);            
         }
+               
 
-        public void Send(MyMessage message)
+        public void Send(string mess, string userId, string userName, List<string> selectedInUsers, DateTime date)
         {
-            Clients.Groups(message.SelectedUsers).addMessage(new { senderemail=message.SenderName, createdate=message.CreateTime.ToString(), mess=message.Msg });
-            Clients.Client(Context.ConnectionId).myMessage(new { forWho = "Me:", mess = message.Msg });            
+            Clients.AllExcept(userId).messageToAll(userName, mess, date.ToLocalTime().ToLongTimeString());         
+            Clients.Groups(selectedInUsers).addMessage(userName, mess, date.ToLocalTime().ToLongTimeString());
+            Clients.Client(Context.ConnectionId).myMessage(mess, "Me: ", date.ToLocalTime().ToLongTimeString());
         }
 
         public void OnConnected(string userId)
-        {   
-            IEnumerable<UserMessage> allUsersMessages = uM.UserMessage.GetUserMessages().Where(x => x.ReceiverId == userId).ToList();
-            IEnumerable<Message> allMessages = uM.Message.GetMessages().Where(x=>allUsersMessages.Select(y=>y.MessageId).Contains(x.Id)).ToList();
+        {
+            DateTime dateTimeNow = DateTime.Now;
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
+            IEnumerable<Message> allMessages = uW.Message.GetMessages(allUsersMessages);
+            List<ProjectionUsers> allUsers = uW.User.UsersList();
+            //IEnumerable<AppUser> allUsers = uW.User.GetUsers().Distinct();
+
             foreach (var item in allMessages)
             {
-                Clients.Client(Context.ConnectionId).onConnected( new { mess=item.Body, creatoremail=item.Creator.Email, createdate=item.CreateDate.ToString()});
+                //AppUser unewUser = uW.User.GetUserById(item.CreatorId);
+                string email = allUsers.Where(x=>x.UserId == item.CreatorId).Select(y=>y.UserEmail).FirstOrDefault();
+                    if (item.CreateDate.DayOfYear>=(dateTimeNow.DayOfYear-1))
+                    Clients.Client(Context.ConnectionId).onConnected( new {
+                        mess =item.Body, creatoremail= email, createdate=item.CreateDate});
+            }
+            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear>= (dateTimeNow.DayOfYear - 1)))
+            {
                 if (item.ReadDate == null)
                 {
                     item.ReadDate = DateTime.Now.ToLocalTime();
-                    uM.Save();
+                    uW.Save();
+                }           
+            }
+        }
+
+        public void OnConnectedAllHistory(string userId)
+        {
+            DateTime dateTimeNow = DateTime.Now;
+            IEnumerable<UserMessage> allUsersMessages = uW.UserMessage.GetUserMessages(userId);
+            IEnumerable<Message> allMessages = uW.Message.GetMessages(allUsersMessages);
+            IEnumerable<AppUser> allUsers = uW.User.GetUsers().Distinct();
+
+            foreach (var item in allMessages)
+            {
+                string email = allUsers.Where(x => x.Id == item.CreatorId).Select(y => y.Email).FirstOrDefault();
+                if (item.CreateDate.DayOfYear<(dateTimeNow.DayOfYear - 1))
+                    Clients.Client(Context.ConnectionId).onConnectedAllHistory(new
+                    {
+                        mess = item.Body,
+                        creatoremail = email,
+                        createdate = item.CreateDate
+                    });
+            }
+            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear<(dateTimeNow.DayOfYear - 1)))
+            {
+                if (item.ReadDate == null)
+                {
+                    item.ReadDate = DateTime.Now.ToLocalTime();
+                    uW.Save();
                 }
-            }           
-        }        
+            }
+        }
     }
 }
