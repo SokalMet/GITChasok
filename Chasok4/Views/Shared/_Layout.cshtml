@@ -11,47 +11,55 @@
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/moment.min.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-    <div class="container body-content">
-        <div class="navbar navbar-inverse ">
-            <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Chasok", "Index", "Home")</li>
-                <li>@Html.ActionLink("Chat", "Chat", "Home")</li>
-                <li><a href="#">Income Message<span class="badge" id="cell">0</span></a></li>
-            </ul>
-            <ul class="nav navbar-nav" style="padding-left:5%">
-                @Html.Partial("_LoginPartial");
-            </ul>
-        </div>
-
-        <div class="col-md-12">
-            @RenderBody()
-        </div>
-
-
-        <footer class="col-md-12">
-            <div>
-                <p>&copy; @DateTime.Now.Year – Chasok</p>
+    <div class="row">
+        <div class="col-md-12"  style="margin:25px;">
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            @*<span class="icon-bar"></span>*@
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                         @Html.ActionLink("ChaSok", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            @*<li>@Html.ActionLink("Chasok", "Index", "Home")</li>*@
+                            <li>@Html.ActionLink("Chat", "Chat", "Home")</li>
+                            <li><a href="#" id="messageCounter">Income Message<span class="badge" id="cell"></span></a></li>
+                        </ul>
+                        @Html.Partial("_LoginPartial")
+                    </div>
+                </div>
             </div>
-        </footer>
+        </div>
     </div>
-    
-
-    @*<script>
-            function updateTimer() {
-            var cell = document.getElementById('cell');
-            var count = Number(cell.innerHTML);
-
-            cell.innerHTML = count += 1;
-            };
-
-            setInterval(updateTimer, 1000);
+        <div class="row" style="margin:10px; padding:5px">
+            <div class="col-md-12">
+                @RenderBody()
+            </div>
+        </div>
 
 
-        </script>*@
+        <div>
+            <footer class="col-md-12">
+                <div>
+                    <p>&copy; @DateTime.Now.Year – Chasok</p>
+                </div>
+            </footer>
+        </div>
 
-    
+
+        <script>
+
+
+        </script>
+
+
 </body>
 </html>

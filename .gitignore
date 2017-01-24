@@ -243,3 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Chasok4/Web.Release.config
+/Chasok4/Web.Debug.config

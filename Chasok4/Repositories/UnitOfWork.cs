@@ -7,12 +7,13 @@ using System.Web;
 
 namespace Chasok4.Repositories
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IDisposable, IUnitOfWork
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private MessageRepository messageRepository;
         private UserRepository userRepository;
         private UserMessageRepository userMessageRepository;
+              
 
         public MessageRepository Message
         {

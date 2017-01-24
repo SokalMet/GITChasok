@@ -14,7 +14,6 @@ namespace Chasok4.Models.Entities
         public int Id { get; set; }
         public string Body { get; set; }
         public DateTime CreateDate { get; set; }
-        public DateTime? ReadDate { get; set; }
 
         public string CreatorId { get; set; }
         public AppUser Creator { get; set; }
