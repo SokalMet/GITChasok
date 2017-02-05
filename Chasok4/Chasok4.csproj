@@ -306,7 +306,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="SQL stored procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

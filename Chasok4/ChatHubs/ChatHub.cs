@@ -94,11 +94,11 @@ namespace Chasok4.ChatHubs
             {
                 //AppUser unewUser = uW.User.GetUserById(item.CreatorId);
                 string email = allUsers.Where(x=>x.UserId == item.CreatorId).Select(y=>y.UserEmail).FirstOrDefault();
-                    if (item.CreateDate.DayOfYear>=(dateTimeNow.DayOfYear-1))
+                    if (item.CreateDate.DayOfYear<=(dateTimeNow.DayOfYear-1))
                     Clients.Client(Context.ConnectionId).onConnected( new {
                         mess =item.Body, creatoremail= email, createdate=item.CreateDate});
             }
-            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear>= (dateTimeNow.DayOfYear - 1)))
+            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear<= (dateTimeNow.DayOfYear - 1)))
             {
                 if (item.ReadDate == null)
                 {
@@ -118,7 +118,7 @@ namespace Chasok4.ChatHubs
             foreach (var item in allMessages)
             {
                 string email = allUsers.Where(x => x.Id == item.CreatorId).Select(y => y.Email).FirstOrDefault();
-                if (item.CreateDate.DayOfYear<(dateTimeNow.DayOfYear - 1))
+                if (item.CreateDate.DayOfYear>(dateTimeNow.DayOfYear - 1))
                     Clients.Client(Context.ConnectionId).onConnectedAllHistory(new
                     {
                         mess = item.Body,
@@ -126,7 +126,7 @@ namespace Chasok4.ChatHubs
                         createdate = item.CreateDate
                     });
             }
-            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear<(dateTimeNow.DayOfYear - 1)))
+            foreach (var item in allUsersMessages.Where(el=>el.Message.CreateDate.DayOfYear>(dateTimeNow.DayOfYear - 1)))
             {
                 if (item.ReadDate == null)
                 {
