@@ -66,7 +66,8 @@ $(function () {
             $('#cell').text('0');
         });
 
-        $('#showHistory').click(function () {            
+        $('#showHistory').click(function () {
+            debugger;
             if (localStorage.getItem("getHistoryStyle") != undefined) {
                 if (localStorage.getItem("getHistoryStyle") == "true" && $('#showHistory').text() == "Hide") {
                     localStorage.setItem("getHistoryStyle", "false");
